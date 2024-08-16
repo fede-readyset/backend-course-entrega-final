@@ -54,3 +54,24 @@ Esto iniciará el servidor en http://localhost:3000.
 ├── README.md                 # Documentación del proyecto
 └── package.json              # Dependencias y scripts de npm
 ```
+
+## Scripts disponibles
+- `npm start`: Inicia el servidor en modo de producción.
+- `npm run dev`: Inicia el servidor en modo de desarrollo con nodemon.
+- `npm test`: Ejecuta las pruebas unitarias.
+
+## Contribuciones
+Si deseas contribuir a este proyecto, por favor sigue los siguientes pasos:
+
+- Realiza un fork del repositorio.
+- Crea una nueva rama (git checkout -b feature/nueva-funcionalidad).
+- Realiza tus cambios y haz commit de ellos (git commit -am 'Agrega nueva funcionalidad').
+- Sube tus cambios (git push origin feature/nueva-funcionalidad).
+- Envía un Pull Request.
+
+## Licencia
+Este proyecto está bajo la Licencia MIT. Consulta el archivo LICENSE para obtener más detalles.
+
+## Contacto
+Si tienes alguna duda o sugerencia, puedes contactar al equipo de desarrollo a través de torres.federico@gmail.com
+
