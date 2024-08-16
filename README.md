@@ -37,3 +37,20 @@ Para iniciar la aplicación en un entorno de desarrollo, utiliza el siguiente co
 
 ```bash
 npm start
+```
+
+Esto iniciará el servidor en http://localhost:3000.
+
+## Estructura del proyecto
+```
+├── src/
+│   ├── controllers/          # Controladores de la aplicación
+│   ├── routes/               # Definición de rutas
+│   ├── services/             # Lógica de negocio
+│   ├── views/                # Vistas con Handlebars
+│   └── index.js              # Archivo principal de la aplicación
+├── test/
+│   └── supertest.test.js     # Pruebas automatizadas
+├── README.md                 # Documentación del proyecto
+└── package.json              # Dependencias y scripts de npm
+```
