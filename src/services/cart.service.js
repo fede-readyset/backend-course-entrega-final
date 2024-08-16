@@ -163,7 +163,6 @@ export class CartService {
             } else {
                 throw new Error("No se pudo generar el ticket de compra. Error interno.")
             }
-
         }
 
     }
