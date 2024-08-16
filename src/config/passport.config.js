@@ -32,7 +32,8 @@ const initializePassport = () => {
             }
 
             // Si no existe instancio un carrito y creo un registro nuevo
-            const response = await cartController.addCart(req, res);
+            const newCart = await cartController.addCart();
+
             let nuevoUsuario = {
                 first_name,
                 last_name,
@@ -40,13 +41,14 @@ const initializePassport = () => {
                 age,
                 password: createHash(password),
                 avatar_url: "/img/generic_avatar.jpeg",
-                cart: response.cart,
+                cart: newCart.payload._id,
                 role: "user"
             }
             let resultado = await UsuarioModel.create(nuevoUsuario);
             return done(null, resultado);
             // Si todo está bien mandamos done con el usuario generado.
         } catch (error) {
+            console.log(error);
             return done(error);
         }
     }))

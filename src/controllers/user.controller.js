@@ -22,6 +22,7 @@ class UserController {
     }
 
     async register(req, res) {
+
         passport.authenticate("register", { failureRedirect: "/failedregister" }, async (err, user, info) => {
             if (err) {
                 return res.status(500).send(err.message);
@@ -43,7 +44,9 @@ class UserController {
                     avatar_url: user.avatar_url
                 };
                 req.session.login = true;
-                res.send("<p>Usuario creado con éxito. Redireccionando...</p>         <meta http-equiv='refresh' content='2;url=/profile'>");
+                res.status(200).json({success:true,message:"Usuario generado con éxito", payload:req.session.user});
+                //res.send("<p>Usuario creado con éxito. Redireccionando...</p>         <meta http-equiv='refresh' content='2;url=/profile'>");
+
             })
         });
     }

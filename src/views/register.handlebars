@@ -1,12 +1,121 @@
 
-
+<br>
+<form action="/api/users" method="post">
 
     <div class="upload__container">
-        <h2>Acceso denegado!</h2>       <br>
+        <h2>Nuevo usuario</h2>       <br>
             
         <div class="upload__container--title">
             <input type="text" name="first_name" placeholder="Nombre" required>
         </div>
-
+        <div class="upload__container--title">
+            <input type="text" name="last_name" placeholder="Apellido" required>
+        </div>
+        <div class="upload__container--title">
+            <input type="email" name="email" placeholder="Email" required>
+        </div>
+        <div class="upload__container--title">
+            <input type="password" name="password" placeholder="Password" required>
+        </div>
+        <div class="upload__container--title">    
+            <input type="text" name="age" placeholder="Edad" required>
+        </div>
+        <div class="upload__container--button">
+            <button type="submit">Registrar</button>
+        </div>
     </div>
 </form>
+
+<!--
+<form id="register-form">
+
+
+    <div class="upload__container">
+        <h2>Registro de nuevo usuario</h2>       <br>
+            
+        <div class="upload__container--title">
+            <input type="text" name="first_name" placeholder="Nombre" required>
+        </div>
+        <div class="upload__container--title">
+            <input type="text" name="last_name" placeholder="Apellido" required>
+        </div>
+        <div class="upload__container--title">
+            <input type="email" name="email" placeholder="Email" required>
+        </div>
+        <div class="upload__container--title">
+            <input type="password" name="password" placeholder="Password" required>
+        </div>
+        <div class="upload__container--title">
+            <input type="password" name="password2" placeholder="Repetir Password" required>
+        </div>
+        <div class="login-form-button">
+            <button type="submit">Registrar</button>
+        </div>
+    </div>
+</form>
+
+
+<script>
+document.getElementById('register-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevenir que el formulario se envíe de la manera tradicional
+
+    // Obtener los valores de los campos del formulario
+    const formData = new FormData(event.target);
+    const userData = {
+        first_name: formData.get('first_name'),
+        last_name: formData.get('last_name'),
+        email: formData.get('email'),
+        password: formData.get('password'),
+    };
+
+    // Verificar si las contraseñas coinciden antes de enviar
+    if (userData.password !== formData.get('password2')
+) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Las contraseñas no coinciden',
+        });
+        return;
+    }
+
+    // Enviar los datos al endpoint
+    fetch('/api/users', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    })
+    .then(response => {
+        console.log("RESPUESTA DEL SERVIDOR: ");
+        console.log(response);
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw new Error(errorData.message || 'Error en el registro');
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: 'Usuario registrado con éxito',
+        }).then(() => {
+            // Opcional: Redirigir o limpiar el formulario después de la notificación
+            event.target.reset(); // Limpiar el formulario
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: `Error al registrar usuario: ${error.message}`,
+        });
+    });
+});
+</script>
+
+-->

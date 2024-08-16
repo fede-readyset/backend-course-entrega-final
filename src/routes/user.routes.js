@@ -23,8 +23,9 @@ router.put("/premium/:uid", userController.changePremiumRole);
 router.post("/", passport.authenticate("register", {
     failureRedirect: "/failedregister"
 }), async (req, res) => {
+
     if (!req.user) {
-        return res.status(400).send("Credenciales inválidas duuuu")
+        return res.status(400).send("Credenciales inválidas")
     }
 
     req.session.user = {

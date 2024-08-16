@@ -329,3 +329,20 @@
 {"level":"error","message":"Fallo al finalizar la compra. Error interno del servidor. Socket.io no está disponible en la solicitud","stack":"Error: Socket.io no está disponible en la solicitud\n    at CartController.confirmPurchase (file:///Users/federicotorres/Backend-course/backend-course-entrega-final/src/controllers/cart.controller.js:218:23)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)"}
 {"level":"error","message":"Fallo al finalizar la compra. Error interno del servidor. Cannot read properties of null (reading 'stock')","stack":"TypeError: Cannot read properties of null (reading 'stock')\n    at file:///Users/federicotorres/Backend-course/backend-course-entrega-final/src/services/cart.service.js:131:50\n    at Array.forEach (<anonymous>)\n    at CartService.confirmPurchase (file:///Users/federicotorres/Backend-course/backend-course-entrega-final/src/services/cart.service.js:130:23)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async CartController.confirmPurchase (file:///Users/federicotorres/Backend-course/backend-course-entrega-final/src/controllers/cart.controller.js:211:28)"}
 {"level":"error","message":"Fallo al finalizar la compra. Error interno del servidor. Socket.io no está disponible en la solicitud","stack":"Error: Socket.io no está disponible en la solicitud\n    at CartController.confirmPurchase (file:///Users/federicotorres/Backend-course/backend-course-entrega-final/src/controllers/cart.controller.js:218:23)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}

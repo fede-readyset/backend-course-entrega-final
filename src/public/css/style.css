@@ -204,8 +204,16 @@ nav a:hover {
 .upload__container--image,
 .upload__container--title,
 .upload__container--button {
+    padding: 10px;
     margin-bottom: 10px;
     width: 70%;
+    font-size: 1rem;
+    border: 1px solid #ccc; /* Borde gris */
+    border-radius: 8px;
+    width: 90%;
+    box-sizing: border-box;
+    background-color: #fff; /* Fondo blanco para asegurar visibilidad */
+    color: #333; /* Color del texto */
 }
 
 .upload__container--textarea {
@@ -225,6 +233,22 @@ nav a:hover {
     width: 90%;
 
 }
+
+
+.upload__container--title input[type="text"]::placeholder,
+.upload__container--title input[type="email"]::placeholder,
+.upload__container--title input[type="password"]::placeholder {
+    color: #999; /* Color del placeholder gris */
+}
+
+.upload__container--title input[type="text"]:focus,
+.upload__container--title input[type="email"]:focus,
+.upload__container--title input[type="password"]:focus {
+    border-color: #999; /* Borde más oscuro al enfocar */
+    outline: none; /* Quitar el outline por defecto al enfocar */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Ligera sombra al enfocar */
+}
+
 
 .upload__container--button button {
     padding: 10px;

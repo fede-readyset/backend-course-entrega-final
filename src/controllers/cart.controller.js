@@ -210,8 +210,10 @@ export class CartController {
         try {
             const result = await this.cartService.confirmPurchase(cid, purchaser);
 
+            // Aviso que hubo cambios en el stock para RealTime Products
             req.io.emit("UpdateNeeded", true);
             
+            // Respuesta OK
             res.status(200).json({
                 success: true,
                 message: "Ticket generado correctamente.",
@@ -220,8 +222,10 @@ export class CartController {
             });
 
         } catch (error) {
+            // Logueo la falla
             req.logger.error("Fallo al finalizar la compra. Error interno del servidor.",error);
-
+            
+            // Devuelvo error interno
             res.status(500).json({
                 success: false,
                 message: "Fallo al finalizar la compra. Error interno del servidor.",
