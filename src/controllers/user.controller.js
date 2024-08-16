@@ -280,26 +280,27 @@ class UserController {
 
                 // Función para eliminar la extensión del nombre del archivo
                 const removeFileExtension = (filename) => filename.replace(/\.[^/.]+$/, "");
+                const cleanPath = path => path.replace(/^src\/public\//, '');
 
 
                 if (uploadedDocuments.document) {
                     documents.push(...uploadedDocuments.document.map(doc => ({
                         name: removeFileExtension(doc.originalname),
-                        reference: doc.path
+                        reference: cleanPath(doc.path)
                     })));
                 }
 
                 if (uploadedDocuments.products) {
                     documents.push(...uploadedDocuments.products.map(doc => ({
                         name: removeFileExtension(doc.originalname),
-                        reference: doc.path
+                        reference: cleanPath(doc.path)
                     })));
                 }
 
                 if (uploadedDocuments.profile) {
                     documents.push(...uploadedDocuments.profile.map(doc => ({
                         name: removeFileExtension(doc.originalname),
-                        reference: doc.path
+                        reference: cleanPath(doc.path)
                     })));
                 }
 
@@ -316,6 +317,8 @@ class UserController {
         }
 
     }
+
+
 
 }
 

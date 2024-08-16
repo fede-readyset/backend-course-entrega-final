@@ -38,7 +38,8 @@ router.post("/", passport.authenticate("register", {
         avatar_url: req.user.avatar_url
     }
     req.session.login = true;
-    res.send("<p>Usuario creado con éxito. Redireccionando...</p><meta http-equiv='refresh' content='2;url=/api/users/profile'>");
+    // res.send("<p>Usuario creado con éxito. Redireccionando...</p><meta http-equiv='refresh' content='2;url=/api/users/profile'>");
+    res.status(200).json({success:true,message:"Usuario creado con éxito.",payload:req.session.user});
 })
 
 

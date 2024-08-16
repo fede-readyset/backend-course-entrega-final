@@ -1,4 +1,4 @@
-
+{{!-- 
 <br>
 <form action="/api/users" method="post">
 
@@ -24,9 +24,9 @@
             <button type="submit">Registrar</button>
         </div>
     </div>
-</form>
+</form> --}}
 
-<!--
+
 <form id="register-form">
 
 
@@ -88,8 +88,6 @@ document.getElementById('register-form').addEventListener('submit', function(eve
         body: JSON.stringify(userData)
     })
     .then(response => {
-        console.log("RESPUESTA DEL SERVIDOR: ");
-        console.log(response);
         if (!response.ok) {
             return response.json().then(errorData => {
                 throw new Error(errorData.message || 'Error en el registro');
@@ -104,7 +102,7 @@ document.getElementById('register-form').addEventListener('submit', function(eve
             text: 'Usuario registrado con éxito',
         }).then(() => {
             // Opcional: Redirigir o limpiar el formulario después de la notificación
-            event.target.reset(); // Limpiar el formulario
+            window.location.href = '/api/users/profile';
         });
     })
     .catch(error => {
@@ -118,4 +116,3 @@ document.getElementById('register-form').addEventListener('submit', function(eve
 });
 </script>
 
--->

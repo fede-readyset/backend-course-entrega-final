@@ -346,3 +346,6 @@
 {"level":"error"}
 {"level":"error"}
 {"level":"error"}
+{"level":"error"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}

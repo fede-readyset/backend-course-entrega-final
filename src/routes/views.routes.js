@@ -46,14 +46,14 @@ router.use(bodyParser.urlencoded({ extended: true }));
 ////////////
 // RUTAS:
 router.get("/", viewsController.renderProducts);
-router.get("/carts/:cid?", viewsController.renderCart);
+router.get("/carts/:cid?", checkUserRole(['user','premium']), viewsController.renderCart);
 router.get("/realtimeproducts", checkUserRole(['admin']), viewsController.renderRealTimeProducts);
 router.get("/login", viewsController.renderLogin);
 router.get("/register", viewsController.renderRegister);
 router.get("/newproduct", checkUserRole(['admin','premium']), viewsController.renderNewProductForm);
 router.get("/accessdenied", viewsController.renderAccessDenied);
 router.get("/mockingproducts", viewsController.mockingProducts);
-
+router.get("/users", checkUserRole(['admin']),viewsController.renderUsers);
 
 // Ruta para cargar nuevos productos
 router.post("/newproduct", multer({storage}).single("image"), async (req,res) => {

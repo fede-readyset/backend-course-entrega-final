@@ -7,6 +7,12 @@ const cartRepository = new CartRepository();
 import CartService from "../services/cart.service.js";
 const cartService = new CartService();
 
+import UserService from "../services/user.service.js";
+const userService = new UserService();
+
+import moment from 'moment';
+
+
 import { generateProduct } from "../utils/utils.js"; // Mocking
 
 
@@ -107,7 +113,25 @@ class ViewsController {
         res.render("newProduct", { session:req.session, owner });
     }
 
+    // Vista de usuarios
+    async renderUsers(req,res) {
+        if (!req.session.login) return res.redirect("/login");
+        let result = await userService.getAllUsers();
+        let users = result.map(user => ({
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+            documents: user.documents.map(doc => ({
+                name: doc.name,
+                reference: doc.reference
+            })),
+            role: user.role,
+            last_connection: user.last_connection ? moment(user.last_connection).format('YYYY-MM-DD HH:mm') : 'N/A'
 
+        }))
+
+        res.render("users", {session: req.session, users});
+    }
 
     // Vista del login
     async renderLogin(req, res) {
@@ -132,7 +156,7 @@ class ViewsController {
 
     async renderAccessDenied(req, res) {
 
-        res.render("accessDenied");
+        res.render("accessDenied",{session: req.session});
     }
 
 

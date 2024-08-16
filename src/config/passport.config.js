@@ -47,6 +47,7 @@ const initializePassport = () => {
             let resultado = await UsuarioModel.create(nuevoUsuario);
             return done(null, resultado);
             // Si todo está bien mandamos done con el usuario generado.
+            
         } catch (error) {
             console.log(error);
             return done(error);
