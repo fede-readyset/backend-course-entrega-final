@@ -61,25 +61,25 @@ export class CartController {
         }
     }
 
-  /*   async addCart(req, res) {
-        //const products = req.body.products  ||[];
-        try {
-            const cart = await this.cartService.createCart();
-            res.status(200).json({
-                success: true,
-                message: "Carrito creado con éxito.",
-                payload: cart
-            });
-        } catch (error) {
-            res.status(500).json({
-                success: false,
-                message: "Fallo al crear el carrito, error interno del servidor.",
-                error: error.message
-            });
-            req.logger.error("Fallo al crear el carrito, error interno del servidor.");
-
-        }
-    } */
+    /*   async addCart(req, res) {
+          //const products = req.body.products  ||[];
+          try {
+              const cart = await this.cartService.createCart();
+              res.status(200).json({
+                  success: true,
+                  message: "Carrito creado con éxito.",
+                  payload: cart
+              });
+          } catch (error) {
+              res.status(500).json({
+                  success: false,
+                  message: "Fallo al crear el carrito, error interno del servidor.",
+                  error: error.message
+              });
+              req.logger.error("Fallo al crear el carrito, error interno del servidor.");
+  
+          }
+      } */
 
     async addCart() {
         try {
@@ -103,7 +103,7 @@ export class CartController {
 
     async addProductToCart(req, res) {
         const { cid, pid } = req.params;
-        const buyerEmail=req.session.user.email;
+        const buyerEmail = req.session.user.email;
         try {
             await this.cartService.addProductToCart(cid, pid, buyerEmail);
             res.status(200).json({
@@ -204,13 +204,14 @@ export class CartController {
 
 
 
-    async confirmPurchase(req,res){
+    async confirmPurchase(req, res) {
         const cid = req.params.cid;
         const purchaser = req.session.user.email;
-
         try {
-            const result = await this.cartService.confirmPurchase(cid,purchaser);
+            const result = await this.cartService.confirmPurchase(cid, purchaser);
+
             req.io.emit("UpdateNeeded", true);
+            
             res.status(200).json({
                 success: true,
                 message: "Ticket generado correctamente.",
@@ -219,12 +220,13 @@ export class CartController {
             });
 
         } catch (error) {
+            req.logger.error("Fallo al finalizar la compra. Error interno del servidor.",error);
+
             res.status(500).json({
                 success: false,
                 message: "Fallo al finalizar la compra. Error interno del servidor.",
                 error: error.message
             });
-            req.logger.error("Fallo al finalizar la compra. Error interno del servidor.");
 
         }
     }

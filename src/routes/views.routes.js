@@ -11,8 +11,12 @@ import multer from "multer";
 import CustomError from "../services/errors/CustomError.js";
 import generateErrorInfo from "../services/errors/info.js";
 import EErrors from "../services/errors/info.js";
+import cartCountMiddleware from "../middlewares/cartCount.js";
 
 const router = express.Router();
+
+// Configuro middleware para actualizar el header
+router.use(cartCountMiddleware);
 
 
 // Función para generar el nuevo nombre del archivo

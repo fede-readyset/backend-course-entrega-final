@@ -16,11 +16,8 @@ class UserController {
         if (!req.session.login) {
             return res.redirect("login");
         } else {
-            const session = {
-                loggedIn: req.session.login,
-                user: req.session.user,
-            };
-            return res.render("profile", { session });
+            
+            return res.render("profile", { session:req.session });
         }
     }
 

@@ -17,7 +17,6 @@ class SocketService {
                 socket.emit("Productos", products);
             });
 
-
             socket.on("init", async (data) => {
                 const messagesLogs = await MensajesModel.find().lean();
                 this.io.emit("messagesLogs", messagesLogs);

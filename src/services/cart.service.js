@@ -111,6 +111,13 @@ export class CartService {
         }
     }
 
+    async countProducts(cartId) {
+        const cart = await this.cartRepository.findById(cartId);
+        if (!cart) throw new Error("Carrito inexistente");
+        let qty=cart.products.reduce((total,product) => total+product.qty,0);
+        return qty;
+    }
+
     async confirmPurchase(cartId, purchaser) {
         // Verifico que exista el carrito y devuelvo error si no existe
         const cart = await this.cartRepository.findById(cartId);
@@ -149,18 +156,10 @@ export class CartService {
 
                 // Actualizo stock del inventario         
                 availableProducts.forEach(async producto => {
-                    console.log("Stock anterior: " + producto.product.stock);
-                    console.log("Stock deducido: " + producto.qty);
-
                     producto.product.stock -= producto.qty;
-                    console.log("Nuevo Stock: " + producto.product.stock);
-                    console.log(producto.product._id);
-
                     await this.productRepository.updateById(producto.product._id,  producto.product );
-
                 })
                 return { result };
-
             } else {
                 throw new Error("No se pudo generar el ticket de compra. Error interno.")
             }

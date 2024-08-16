@@ -6,6 +6,7 @@ import MongoStore from "connect-mongo";
 import session from "express-session";
 // import cookieParser from 'cookie-parser';
 import configObject from "./config/config.js";
+import SocketService from "./services/socket.service.js";
 
 
 // Importo conexión con database
@@ -27,12 +28,6 @@ import swaggerUiExpress from "swagger-ui-express";
 import specs from "./config/swagger.config.js";
 
 
-// Defino variables e instancio clases
-const PUERTO = configObject.port;
-const app = express();
-
-
-
 // Importo las rutas
 import cartsRouter from "./routes/carts.routes.js";
 import productsRouter from "./routes/products.routes.js";
@@ -40,6 +35,26 @@ import viewsRouter from "./routes/views.routes.js";
 import chatRouter from "./routes/chat.routes.js";
 import usersRouter from "./routes/user.routes.js";
 import sessionsRouter from "./routes/session.routes.js";
+
+
+// Defino variables e instancio clases
+const PUERTO = configObject.port || 3000;
+const app = express();
+
+// Listener - Iniciar el servidor HTTP **antes** de configurar las rutas
+const httpServer = app.listen(PUERTO, () => {
+    console.log(`Escuchando en el http://localhost:${PUERTO}`);
+});
+
+// Inicializo el servicio de socket.io
+const socketService = new SocketService(httpServer);
+const io = socketService.io;
+
+// Middleware para inyectar io en req (para que pueda estar disponible en toda la app)
+app.use((req, res, next) => {
+    req.io = io;
+    next();
+});
 
 
 // Configuro Middlewares
@@ -63,19 +78,12 @@ app.use(passport.session());
 app.use(errorHandler);
 app.use(addLogger);
 
-// Registro el helper `eq`
-Handlebars.registerHelper('eq', function (a, b) {
-    return a === b;
-});
-// Helper or: para evaluar si al menos una de las dos condiciones es verdadera
-Handlebars.registerHelper('or', function (a, b) {
-    return a || b;
-});
 
-// Helper and: para evaluar si al menos una de las dos condiciones es verdadera
-Handlebars.registerHelper('and', function (a, b) {
-    return a && b;
-});
+// Algunos Helpers de HandleBars:
+
+Handlebars.registerHelper('eq', function (a, b) { return a === b; });
+Handlebars.registerHelper('or', function (a, b) { return a || b; });
+Handlebars.registerHelper('and', function (a, b) { return a && b; });
 
 
 // Configuro express-handlebars
@@ -97,24 +105,6 @@ app.use("/api/sessions", sessionsRouter);
 app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 
+
+// Manejador de errores
 app.use(errorHandler);
-
-// Listener
-const httpServer = app.listen(PUERTO, () => {
-
-    console.log(`Escuchando en el http://localhost:${PUERTO}`);
-});
-
-
-
-// Inicializo el servicio de socket.io
-import SocketService from "./services/socket.service.js";
-const socketService = new SocketService(httpServer);
-
-// Middleware para inyectar io en req
-/* app.use((req, res, next) => {
-    req.io = io;
-    next();
-}); */
-
-

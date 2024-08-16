@@ -30,12 +30,7 @@ class ViewsController {
                 const { ...rest } = product.toObject();
                 return rest;
             })
-            const session = {
-                loggedIn: req.session.login,
-                user: req.session.user
-            };
-            // console.log(session);
-            // console.log(products);
+
             // Envio la data para ser renderizada           
             res.render("products", {
                 products: products,
@@ -47,7 +42,7 @@ class ViewsController {
                 totalPages: result.totalPages,
                 limit: limit,
                 sort: req.query.sort,
-                session
+                session: req.session
             });
 
         } catch (error) {
@@ -77,12 +72,6 @@ class ViewsController {
             // Busco el carrito
             const carrito = await cartRepository.findById(cid);
 
-            // Me traigo un par de parámetros de la sesión
-            const session = {
-                loggedIn: req.session.login,
-                user: req.session.user
-            };
-
             // Obtengo el subtotal de cada item
             carrito.products.forEach(product => {
                 product.subtotal = Math.round(product.qty * product.product.price);
@@ -95,8 +84,8 @@ class ViewsController {
             res.render("carts", {
                 cid: cid,
                 carrito: carrito,
-                session,
-                provTotal: provTotal
+                provTotal: provTotal,
+                session: req.session
             });
 
         } catch (error) {
@@ -114,12 +103,8 @@ class ViewsController {
         if (!req.session.login) return res.redirect("/login");
 
         let owner = req.session.user.role === "admin" ? "admin" : req.session.user.email; 
-        const session = {
-            loggedIn: req.session.login,
-            user: req.session.user,
-            owner
-        };
-        res.render("newProduct", { session });
+ 
+        res.render("newProduct", { session:req.session, owner });
     }
 
 
@@ -137,13 +122,7 @@ class ViewsController {
     // Vista de Realtime Products
     async renderRealTimeProducts(req, res) {
         if (!req.session.login) return res.redirect("/login");
-
-        const session = {
-            loggedIn: req.session.login,
-            user: req.session.user
-        };
-
-        res.render("realTimeProducts", { session });
+        res.render("realTimeProducts", { session:req.session  });
     }
 
     //  Vista del chat

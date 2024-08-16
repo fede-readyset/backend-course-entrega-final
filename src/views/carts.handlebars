@@ -46,7 +46,7 @@
         <h3>Cart summary:</h3>
         <div class="total">
             <p>Sub Total: EUR <span id="total-provisional" class="total-provisional">€{{provTotal}}</span></p>
-            <p>Shipping : Enter shipping address</span></p>
+            <p>Shipping: (Enter shipping address)</span></p>
             <p>Total: EUR <span id="total-provisional" class="total-provisional">€{{provTotal}}</span></p>
 
 
@@ -135,6 +135,7 @@
                 method: 'GET'
             })
                 .then(response => {
+                    console.log(response);
                     if (!response.ok) {
                         return Swal.fire({
                             icon: 'error',

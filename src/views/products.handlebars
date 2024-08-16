@@ -17,8 +17,7 @@
         <p>Categoría: {{this.category}}</p>
 
         <p>Vendedor: {{#if (eq this.owner "admin")}} CoderMart {{else}} {{this.owner}} {{/if}} </p>
-        {{!-- <p>User actual: {{../session.user.email}} </p>
-        --}}
+        
         <h2 style="text-align:center">€ {{this.price}}</h2>
 
 
@@ -116,6 +115,8 @@
                             title: 'Producto agregado al carrito',
                             showConfirmButton: false,
                             timer: 2000
+                        }).then(() => {
+                            window.location.reload();
                         });
 
                     })
