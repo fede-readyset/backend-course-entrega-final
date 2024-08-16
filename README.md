@@ -20,8 +20,8 @@ Este proyecto es una aplicación web construida con Node.js, que incluye funcion
 
 1. Clona este repositorio:
     ```bash
-    git clone https://github.com/tu_usuario/nombre_del_repositorio.git
-    cd nombre_del_repositorio
+    git clone https://github.com/fede_readyset/backend-course-entrega-final.git
+    cd backend-course-entrega-final
     ```
 
 2. Instala las dependencias:
