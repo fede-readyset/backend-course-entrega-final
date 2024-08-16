@@ -94,7 +94,6 @@ const initializePassport = () => {
         clientSecret: configObject.github_client_secret,
         callbackURL: `${configObject.base_url}/api/sessions/githubcallback`
     }, async (accessToken, refreshToken, profile, done) => {
-        // console.log('GitHub profile:', profile); // Agrega esto para ver la estructura del perfil
 
         try {
             const email = (profile.emails && profile.emails[0].value) || profile._json.email;

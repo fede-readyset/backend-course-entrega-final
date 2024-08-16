@@ -292,3 +292,4 @@
 {"level":"error","message":"Socket.IO no está definido en req"}
 {"level":"error","message":"Error emitting update event Cannot read properties of undefined (reading 'emit')","stack":"TypeError: Cannot read properties of undefined (reading 'emit')\n    at ProductController.updateProduct (file:///Users/federicotorres/Backend-course/backend-course/Desafio%20Complementario%203/src/controllers/product.controller.js:115:28)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)"}
 {"level":"error","message":"Fallo al finalizar la compra. Error interno del servidor."}
+{"code":"redirect_uri_mismatch","level":"error","message":"The redirect_uri MUST match the registered callback URL for this application.","name":"AuthorizationError","status":500,"uri":"https://docs.github.com/apps/managing-oauth-apps/troubleshooting-authorization-request-errors/#redirect-uri-mismatch"}
