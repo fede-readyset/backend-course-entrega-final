@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import configObject from "../config/config.js";
 
 class EmailManager {
     constructor() {
@@ -7,35 +8,79 @@ class EmailManager {
             port: 587,
             auth: {
                 user: 'torres.federico@gmail.com',
-                pass: 'bjglkdsinhhbdsgw' // PENDIENTE: agregar a .env
+                pass: configObject.gmail_app_passwd
             }
         })
     }
 
 
-    async sendPurchaseEmail (email, first_name, ticket) {
+    async sendPurchaseEmail (emailData) {
         try {
+
+            let productsTable = `
+            <table border="1" cellpadding="5" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+
+
+            console.log(emailData.products)
+
+            // Recorrer los productos para agregarlos a la tabla
+            emailData.products.forEach(product => {
+
+                productsTable += `
+                    <tr>
+                        <td>${product.product.description}</td>
+                        <td>${product.qty}</td>
+                        <td>€ ${product.unitPrice.toFixed(2)}</td>
+                        <td>€ ${(product.qty * product.unitPrice).toFixed(2)}</td>
+
+                    </tr>
+                `;
+            });
+
+            productsTable += `
+                        <tr>
+                            <td colspan=3>Total de la Compra</td>
+                            <td> € ${emailData.ammount}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+
+
+
             const mailOptions = {
-                from: "Coder Test <torres.federico@gmail.com>",
-                to: email,
+                from: "CoderMart <torres.federico@gmail.com>",
+                to: emailData.purchaser,
                 subject: "Confirmación de tu compra",
                 html:`
-                    <h1>Confirmación de compra </h1>
-                    <p>Gracias por tu compra, ${first_name} </p>
-                    <p>Número de tu orden: ${ticket} </p>
+                    <h1>CoderMart - Confirmación de compra </h1>
+                    <p>Gracias por tu compra ${emailData.purchaser} </p>
+                    <p>Número de tu orden: ${emailData.code} </p>
+                    <p>Detalle de tu compra: </p>
+                    ${productsTable}
                 `
             }
 
             await this.transporter.sendMail(mailOptions);
         } catch (error) {
-            console.log("Error al enviar el mail");
+            console.log("Error al enviar el mail de confirmación de compra");
         }
     }
 
     async sendResetEmail (email, first_name, token) {
         try {
             const mailOptions = {
-                from: "Coder Test <torres.federico@gmail.com>",
+                from: "CoderMart <torres.federico@gmail.com>",
                 to: email,
                 subject: "Restablecimiento de contraseña",
                 html:`
@@ -51,7 +96,7 @@ class EmailManager {
 
             await this.transporter.sendMail(mailOptions);
         } catch (error) {
-            console.log("Error al enviar el mail");
+            console.log("Error al enviar el mail de recuperación de password");
         }
     }
 }

@@ -10,7 +10,8 @@ const configObject = {
     github_client_secret: process.env.GITHUB_CLIENT_SECRET,
     node_env: process.env.NODE_ENV,
     port: process.env.PORT,
-    base_url: process.env.BASE_URL
+    base_url: process.env.BASE_URL,
+    gmail_app_passwd: process.env.GMAIL_APPLICATION_PASS
 }
 
 export default configObject;

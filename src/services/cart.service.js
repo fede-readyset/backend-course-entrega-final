@@ -2,6 +2,9 @@ import CartRepository from "../repositories/cart.repository.js";
 import ProductRepository from "../repositories/product.repository.js";
 import TicketsModel from "../models/tickets.model.js";
 import CarritosModel from "../models/carritos.model.js";
+import EmailManager from "../services/email.js";
+const emailManager = new EmailManager();
+
 
 export class CartService {
     constructor() {
@@ -68,10 +71,6 @@ export class CartService {
         return await this.cartRepository.save(cart);
     }
 
-    /* async emptyCart(cartId) {
-        return await this.cartRepository.updateById(cartId, { $set: { products: [] } });
-    } */
-
     async emptyCart(cartId) {
         // Busca el carrito por ID para verificar si existe
         const cart = await CarritosModel.findById(cartId);
@@ -130,8 +129,12 @@ export class CartService {
         cart.products.forEach(producto => {
             if (producto.qty <= producto.product.stock) {
                 producto.unitPrice = producto.product.price;
+
                 availableProducts.push(producto);
+
                 ammount += producto.qty * producto.product.price;
+                
+
             } else {
                 unavailableProducts.push(producto);
             }
@@ -148,17 +151,29 @@ export class CartService {
             ticket.purchaser = purchaser;
             ticket.code = Math.random().toString(36).slice(2, 12); // genero un random
 
+
             // Guardo el ticket
             const result = await ticket.save();
             if (result) {
                 // Actualizo el carrito dejando sólo los productos sin stock
                 await this.cartRepository.updateById(cartId, { $set: { products: unavailableProducts } });
 
+                const emailData={
+                    purchaser: ticket.purchaser,
+                    ammount: ticket.ammount,
+                    code: ticket.code,
+                    products: availableProducts,
+                }
+                
                 // Actualizo stock del inventario         
                 availableProducts.forEach(async producto => {
                     producto.product.stock -= producto.qty;
                     await this.productRepository.updateById(producto.product._id,  producto.product );
                 })
+
+                // Envío el email de confirmación de la compra
+                await emailManager.sendPurchaseEmail(emailData);
+
                 return { result };
             } else {
                 throw new Error("No se pudo generar el ticket de compra. Error interno.")
