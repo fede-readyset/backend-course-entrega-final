@@ -92,7 +92,7 @@ const initializePassport = () => {
     passport.use("github", new GitHubStrategy({
         clientID: configObject.github_client_id,
         clientSecret: configObject.github_client_secret,
-        callbackURL: "http://localhost:8080/api/sessions/githubcallback"
+        callbackURL: `${configObject.base_url}/api/sessions/githubcallback`
     }, async (accessToken, refreshToken, profile, done) => {
         // console.log('GitHub profile:', profile); // Agrega esto para ver la estructura del perfil
 
