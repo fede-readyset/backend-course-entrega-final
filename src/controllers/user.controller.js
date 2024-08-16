@@ -73,26 +73,29 @@ class UserController {
                 }
 
                 try {
-                    const usuarioEncontrado = await UsuarioModel.findById(user._id); // Asegúrate de que la propiedad sea _id
-                    if (usuarioEncontrado) {
-                        usuarioEncontrado.last_connection = new Date();
-                        await usuarioEncontrado.save();
+                    const userFound = await UsuarioModel.findById(user._id); 
+                    if (userFound) {
+                        userFound.last_connection = new Date();
+                        await userFound.save();
                     }
+                    req.session.user = {
+                        first_name: user.first_name,
+                        last_name: user.last_name,
+                        email: user.email,
+                        age: user.age,
+                        role: user.role,
+                        cart: user.cart,
+                        avatar_url: user.avatar_url,
+                        last_connection: userFound.last_connection
+                    };
+                    req.session.login = true;
+                    
                 } catch (error) {
                     return res.status(500).json({ success: false, message: "Error actualizando la última conexión" });
                 }
 
 
-                req.session.user = {
-                    first_name: user.first_name,
-                    last_name: user.last_name,
-                    email: user.email,
-                    age: user.age,
-                    role: user.role,
-                    cart: user.cart,
-                    avatar_url: user.avatar_url
-                };
-                req.session.login = true;
+                
 
 
                 return res.status(200).json({
