@@ -1,0 +1,44 @@
+<br>
+<div class="upload">
+    <form action="/newproduct" method="POST" enctype="multipart/form-data" class="upload__container">
+        <h2>Agregar nuevo producto</h2>
+        <div class="upload__field">
+            <label for="title">Título:</label>
+            <input type="text" id="title" name="title" placeholder="Título" required>
+        </div>
+        <div class="upload__field">
+            <label for="description">Descripción:</label>
+            <textarea id="description" name="description" placeholder="Descripción" rows="4" required></textarea>
+        </div>
+        <div class="upload__field">
+            <label for="price">Precio:</label>
+            <input type="text" id="price" name="price" placeholder="Precio" required>
+        </div>
+        <div class="upload__field">
+            <label for="code">Código:</label>
+            <input type="text" id="code" name="code" placeholder="Código" >
+        </div>
+        <div class="upload__field">
+            <label for="category">Categoría:</label>
+            <input type="text" id="category" name="category" placeholder="Categoría" required>
+        </div>
+        <div class="upload__field">
+            <label for="stock">Stock:</label>
+            <input type="text" id="stock" name="stock" placeholder="Stock" required>
+        </div>
+        <div class="upload__field">
+            <label for="image">Thumbnail:</label>
+            <input type="file" id="image" name="image" >
+        </div>
+        <div class="upload__field">
+            <label for="status">Activo?</label>
+            <input type="checkbox" id="status" name="status">
+        </div>
+        
+        <input type="hidden" name="owner" value={{session.owner}}>
+
+        <div class="upload__field">
+            <button type="submit">Guardar</button>
+        </div>
+    </form>
+</div>

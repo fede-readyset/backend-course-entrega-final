@@ -1,0 +1,58 @@
+components:
+  schemas:
+    Ticket:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "60d21b4667d0d8992e610c85"
+        code:
+          type: string
+          example: "TICKET1234"
+        purchase_datetime:
+          type: string
+          format: date-time
+          example: "2024-07-24T14:30:00Z"
+        amount:
+          type: number
+          format: float
+          example: 150.75
+        purchaser:
+          type: string
+          example: "user@example.com"
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+                description: ID del producto
+                example: "60d21b4667d0d8992e610c86"
+              qty:
+                type: number
+                description: Cantidad del producto
+                example: 3
+              unitPrice:
+                type: number
+                format: float
+                description: Precio unitario del producto
+                example: 50.25
+      required:
+        - purchase_datetime
+        - amount
+        - purchaser
+        - products
+      example:
+        _id: "60d21b4667d0d8992e610c85"
+        code: "TICKET1234"
+        purchase_datetime: "2024-07-24T14:30:00Z"
+        amount: 150.75
+        purchaser: "user@example.com"
+        products:
+          - product: "60d21b4667d0d8992e610c86"
+            qty: 3
+            unitPrice: 50.25
+          - product: "60d21b4667d0d8992e610c87"
+            qty: 2
+            unitPrice: 25.00

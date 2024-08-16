@@ -1,0 +1,155 @@
+paths:
+  /api/users/profile:
+    get:
+      summary: Obtiene el perfil del usuario
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Perfil del usuario
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/User"
+        '401':
+          description: No autorizado
+
+  /api/users/failedregister:
+    get:
+      summary: Registro fallido
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Registro fallido
+
+  /api/users/requestPasswordReset:
+    post:
+      summary: Solicita restablecimiento de contraseña
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RequestPasswordReset"
+      responses:
+        '200':
+          description: Solicitud de restablecimiento enviada
+        '404':
+          description: Usuario no encontrado
+        '500':
+          description: Error interno del servidor
+
+  /api/users/reset-password:
+    post:
+      summary: Restablece la contraseña del usuario
+      tags:
+        - Users      
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResetPassword"
+      responses:
+        '200':
+          description: Contraseña restablecida
+        '404':
+          description: Usuario no encontrado
+        '500':
+          description: Error interno del servidor
+
+  /api/users/premium/{uid}:
+    put:
+      summary: Cambia el rol del usuario a premium
+      tags:
+        - Users     
+      parameters:
+        - in: path
+          name: uid
+          schema:
+            type: string
+          required: true
+          description: ID del usuario
+      responses:
+        '200':
+          description: Rol del usuario actualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '404':
+          description: Usuario no encontrado
+        '500':
+          description: Error en el servidor
+
+  /api/users:
+    post:
+      summary: Registra un nuevo usuario
+      tags:
+        - Users     
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        '200':
+          description: Usuario creado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '400':
+          description: Credenciales inválidas
+        '500':
+          description: Error interno del servidor
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: ObjectID
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        age:
+          type: integer
+        role:
+          type: string
+        cart:
+          type: string
+        avatar_url:
+          type: string
+      example:
+        _id: ObjectID("123123121abcdef")
+        first_name: John
+        last_name: Doe
+        email: john@doe.com
+        age: 30
+        role: admin
+        cart: ObjectID("1238293198237bcde")
+        avatar_url: https://john.doe.com/avatar.png
+    RequestPasswordReset:
+      type: object
+      properties:
+        email:
+          type: string
+          example: usuario@example.com
+    ResetPassword:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        token:
+          type: string

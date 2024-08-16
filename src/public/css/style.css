@@ -1,0 +1,858 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #e60023;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5em;
+    text-decoration: none;
+    color: white;
+}
+
+.thumbnail {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.thumbnail-container {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 8px 8px 0 0;
+    /* Opcional: añade bordes redondeados */
+}
+
+.mini__thumbnail {
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+nav li {
+    margin-right: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #ffd700;
+    /* Cambia el color al pasar el ratón sobre los enlaces */
+}
+
+#logotipo {
+    width: 300px;
+    height: 55px;
+}
+
+
+#mini-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    /* Para hacerlo circular */
+    overflow: hidden;
+}
+
+/* Estilo de página de perfil  */
+.profile__info {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+    align-items: center;
+    /* Centra verticalmente los elementos en el contenedor */
+}
+
+.profile__avatar {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    /* Para hacerlo circular */
+    overflow: hidden;
+    /* Para ocultar cualquier parte de la imagen que se salga del borde circular */
+}
+
+.profile__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Para que la imagen se ajuste correctamente al contenedor */
+}
+
+.profile__miniavatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    /* Para hacerlo circular */
+    overflow: hidden;
+    /* Para ocultar cualquier parte de la imagen que se salga del borde circular */
+}
+
+.profile__miniavatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Para que la imagen se ajuste correctamente al contenedor */
+}
+
+.profile__details {
+    display: grid;
+    grid-gap: 10px;
+    /* Espaciado entre los detalles */
+}
+
+.profile__detail {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    /* Una columna para la etiqueta y otra para el valor */
+}
+
+.detail__label {
+    font-weight: bold;
+    /* Para resaltar las etiquetas */
+}
+
+/* Realtime Products */
+.realtime__container {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 1000px;
+}
+
+.realtime__container h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.productos-container {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.lista-productos {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.lista-productos li {
+    padding: 10px;
+    margin-bottom: 5px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.lista-productos li span {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.lista-productos li:last-child {
+    margin-bottom: 0;
+}
+
+/* Upload */
+
+.upload {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.upload__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #c7c7c7;
+    border-radius: 5px;
+    width: 50%;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.upload__container--image,
+.upload__container--title,
+.upload__container--button {
+    margin-bottom: 10px;
+    width: 70%;
+}
+
+.upload__container--textarea {
+    margin-bottom: 10px;
+    width: 35%;
+}
+
+.upload__container--image input[type="file"],
+.upload__container--title input[type="text"],
+.upload__container--title input[type="email"],
+.upload__container--title input[type="password"],
+.upload__container--textarea textarea {
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    width: 90%;
+
+}
+
+.upload__container--button button {
+    padding: 10px;
+    font-size: 1rem;
+
+    border: none;
+    border-radius: 5px;
+    width: 45%;
+
+}
+
+.upload__container--button button {
+    background-color: #fee123;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+}
+
+.upload__container--button button:hover {
+    background-color: #4c2b2f;
+}
+
+.button-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #000000;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    width: 44%;
+}
+
+.button-link:hover {
+    background-color: #0056b3;
+}
+
+.icon {
+    max-width: 25px;
+    max-height: 25px;
+}
+
+/* Cards */
+
+.card {
+    display: inline-block;
+    width: 300px;
+    margin: 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 8px 8px 0 0;
+}
+
+.card h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.card p {
+    font-size: 14px;
+    margin: 10px;
+    color: #777;
+}
+
+/*Button*/
+
+.btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #c4001a;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 10px;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background-color: #e60023;
+}
+
+
+
+
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+#messagesLogs {
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#messagesLogs p {
+    background-color: #f2f2f2;
+    padding: 8px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+}
+
+
+.btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.btn:hover {
+    background-color: #45a049;
+}
+
+
+
+/***************/
+/* Contenedor general */
+
+
+.cart-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 70%;
+    margin: 0 auto;
+    /* Margen automático a izquierda y derecha */
+
+}
+
+/* Container for the list */
+.cart-list-container {
+    width: 40%;
+    /* Top and bottom margin */
+    padding: 20px 10px 0px 20px;
+    /* Padding to create space on the left */
+    flex: 1;
+    background-color: #fafafa;
+    margin-right: 10px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    /* Habilita el desplazamiento vertical */
+    max-height: 600px;
+}
+
+/* Horizontal Card Style */
+.horizontal-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 10px 10px 10px 0px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #fff;
+    overflow: hidden;
+    /* Ensure image stays within the card boundaries */
+}
+
+.cart-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.cart-list-header h3 {
+    margin: 0;
+}
+
+
+
+.thumbnail-container {
+    flex: 0 0 100px;
+    /* Make the container for the image a fixed width */
+    height: 100px;
+    /* Same height as width for a square shape */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.thumbnail {
+    width: 100%;
+    /* Ensure the image fits within the container */
+    height: 100%;
+    object-fit: contain;
+    /* Ensure the image is fully visible within the bounds */
+}
+
+.horizontal-card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    flex: 1;
+    /* Take up remaining space */
+}
+
+.content-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.content-left p {
+    margin: 0 0 5px 0;
+    /* Ensure spacing between paragraphs */
+    color: #777;
+}
+
+.content-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.content-right p {
+    margin: 0 0 5px 0;
+    /* Ensure spacing between paragraphs */
+    color: #777;
+}
+
+.horizontal-card h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 5px 0;
+}
+
+/* Button */
+.horizontal-card .btn {
+    padding: 8px 16px;
+    background-color: #c4001a;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+.horizontal-card .btn:hover {
+    background-color: #e60023;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-btn {
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 5px;
+}
+
+.quantity-input {
+    width: 50px;
+    padding: 5px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.btn-group {
+    display: flex;
+}
+
+.remove-btn,
+.update-btn {
+    padding: 5px;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+}
+
+.clear-btn {
+    padding: 5px;
+    background-color: grey;
+    border: none;
+}
+
+
+
+.return-btn {
+    background-color: grey;
+}
+
+.confirm-btn {
+    background-color: #c4001a;
+}
+
+.remove-btn:hover,
+.update-btn:hover {
+    background-color: transparent;
+}
+
+.btn-group button span {
+    margin-right: 5px;
+    font-size: 1.2rem;
+}
+
+
+.cart-summary {
+    width: 30%;
+    padding: 20px;
+    background-color: rgba(254, 225, 35, 0.451);
+    border-radius: 8px;
+    margin-left: 10px;
+}
+
+.cart-summary h3 {
+    margin-bottom: 10px;
+}
+
+.total {
+    margin-bottom: 20px;
+}
+
+.total-provisional {
+    font-size: 23px;
+    font-weight: 600;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+/*  NUEVO */
+
+
+.upload {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.upload__container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 50%;
+    max-width: 600px;
+}
+
+.upload h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.upload__field {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.upload__field label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.upload__field input[type="text"],
+.upload__field textarea,
+.upload__field input[type="file"] {
+    width: calc(100% - 20px); /* Ajuste para compensar el padding */
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.upload__field textarea {
+    resize: vertical; /* Permite que el textarea sea redimensionable verticalmente */
+}
+
+.upload__field input[type="checkbox"] {
+    margin-top: 5px;
+}
+
+.upload__field button {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.upload__field button:hover {
+    background-color: #45a049;
+}
+
+
+/* Estilos para el campo de texto en el chat */
+
+.chat-container {
+    flex-direction: column;
+    align-items: center;
+    background-color: #f7f7f7;
+    padding: 20px;
+    width: 70%;
+    margin: auto; 
+
+}
+
+.chat-input {
+    margin-bottom: 15px;
+}
+
+.chat-input label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.chat-input input[type="text"] {
+    width: 100%; /* Ajuste para compensar el padding */
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #cccccc; /* Agregamos borde */
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.chat-messages {
+    height: 40%;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #f2f2f2;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.chat-messages p {
+    margin: 0;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.upload__container h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+
+
+/* Estilos exclusivos para la vista de login */
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #c7c7c7;
+    border-radius: 5px;
+    width: 50%;
+    padding: 20px;
+    margin: 20px auto;
+}
+
+.login-container h3 {
+    margin-bottom: 20px;
+    color: #333; /* Color del texto */
+    text-align: center;
+}
+
+.login-form {
+    width: 100%;
+    max-width: 400px; /* Ajustar el ancho del formulario según necesidad */
+}
+
+.login-form-input {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.login-form-input input[type="email"],
+.login-form-input input[type="password"] {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.login-form-button {
+    width: 100%;
+    text-align: center;
+}
+
+.login-form-button button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #fee123;
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.login-form-button button:hover {
+    background-color: #4c2b2f;
+    color: #fff;
+}
+
+.login-github-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.login-github-link:hover {
+    background-color: #0056b3;
+}
+
+.login-github-link .icon {
+    max-width: 25px;
+    max-height: 25px;
+    vertical-align: middle; /* Alinear el ícono verticalmente */
+    margin-right: 10px; /* Espacio entre el ícono y el texto */
+}
+
+.login-register-message {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.login-register-message a {
+    color: #0056b3; /* Color del enlace */
+    text-decoration: none;
+}
+
+.login-register-message a:hover {
+    text-decoration: underline; /* Subrayar el enlace al pasar el mouse */
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button-container form {
+    margin: 0 5px;
+}
+
+.btn {
+    display: inline-block;
+}
+.btn-primary {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.btn-primary:hover {
+    background-color: #45a049;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+}

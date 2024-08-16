@@ -1,0 +1,148 @@
+paths:
+  /api/products:
+    get:
+      tags:
+        - Products
+      summary: Obtiene una lista de productos
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Límite de productos por página
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Número de página
+      responses:
+        '200':
+          description: Listado de productos
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        '404':
+          description: No hay productos para mostrar
+        '500':
+          description: Fallo al obtener listado de productos
+    post:
+      tags:
+        - Products
+      summary: Agrega un nuevo producto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+      responses:
+        '200':
+          description: Producto agregado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        '500':
+          description: Fallo al agregar producto
+
+  /api/products/{pid}:
+    get:
+      tags:
+        - Products
+      summary: Obtiene un producto por ID
+      parameters:
+        - in: path
+          name: pid
+          schema:
+            type: string
+          required: true
+          description: ID del producto
+      responses:
+        '200':
+          description: Producto encontrado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        '404':
+          description: Producto no encontrado
+        '500':
+          description: Fallo al obtener producto
+    put:
+      tags:
+        - Products
+      summary: Actualiza un producto por ID
+      parameters:
+        - in: path
+          name: pid
+          schema:
+            type: string
+          required: true
+          description: ID del producto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+      responses:
+        '200':
+          description: Producto actualizado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        '404':
+          description: No se encontró el producto a actualizar
+        '500':
+          description: Fallo al actualizar producto
+    delete:
+      tags:
+        - Products
+      summary: Elimina un producto por ID
+      parameters:
+        - in: path
+          name: pid
+          schema:
+            type: string
+          required: true
+          description: ID del producto
+      responses:
+        '200':
+          description: Producto eliminado con éxito
+        '404':
+          description: No se encontró el producto a eliminar
+        '500':
+          description: Fallo al eliminar producto
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        category:
+          type: string
+        stock:
+          type: integer
+      required:
+        - name
+        - price
+        - category
+      example:
+        _id: ObjectID("123981293817abcd")
+        name: Harina 0000 1kg
+        description: Harina de trigo enriquecida 0000 por 1Kg
+        price: 100
+        category: Almacén
+        stock: 1000

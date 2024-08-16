@@ -1,0 +1,186 @@
+<h2>Listado de productos</h2>
+<div>
+    <p>User actual: {{session.user.role}}</p>
+
+    {{#each products}}
+    <div class="card">
+        <div class="thumbnail-container">
+            <img class="thumbnail" src="{{this.thumbnail}}" alt="Imagen de {{this.title}}">
+        </div>
+        <p>
+        <h3> {{this.title}}</h3>
+        </p>
+
+        <p>{{this.description}}</p>
+        <p>Stock: {{this.stock}} unidades</p>
+        <p>Código: {{this.code}}</p>
+        <p>Status: {{#if this.status}} Activo {{else}} Inactivo {{/if}}</p>
+        <p>Categoría: {{this.category}}</p>
+
+        <p>Vendedor: {{#if (eq this.owner "admin")}} CoderMart {{else}} {{this.owner}} {{/if}} </p>
+        {{!-- <p>User actual: {{../session.user.email}} </p>
+        --}}
+        <h2 style="text-align:center">€ {{this.price}}</h2>
+
+
+
+        <div class="button-container"> <!-- Contenedor para los botones -->
+
+            {{!-- Mostrar botón "Agregar al carrito" si el owner no es "admin" y el owner no es el usuario actual --}}
+            {{#unless (or (eq ../session.user.role "admin") (eq this.owner ../session.user.email))}}
+            <form class="addtocart-form" method="POST" action="{{this._id}}">
+                <button type="submit" {{#unless this.status}} disabled {{/unless}} class="btn btn-primary"
+                    title="Agregar producto al carrito">
+                    <i class="bi bi-cart-fill me-2"></i>
+                </button>
+            </form>
+            {{/unless}}
+
+
+            {{!-- Mostrar botón "Eliminar" si el owner es "admin" o si el owner es el usuario actual --}}
+            {{#if (or (eq ../session.user.role "admin") (eq this.owner ../session.user.email))}}
+            <form class="delete-form" method="DELETE" action="{{this._id}}">
+                <button type="submit" class="btn btn-danger" title="Eliminar producto de la tienda">
+                    <i class="bi bi-trash-fill me-2"></i>
+                </button>
+            </form>
+            {{/if}}
+
+        </div>
+    </div>
+    {{/each}}
+
+
+
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {{#if hasPrevPage}}
+            <li class="page-item"><a class="page-link" href="/?page={{prevPage}}&limit={{limit}}">
+                    < {{prevPage}}</a>
+            </li>
+            {{/if}}
+
+            <li class="page-item"><a class="page-link" href="#">{{currentPage}}</a></li>
+
+            {{#if hasNextPage}}
+            <li class="page-item"><a class="page-link" href="/?page={{nextPage}}&limit={{limit}}">{{nextPage}} ></a>
+            </li>
+            {{/if}}
+        </ul>
+
+        <div class="text-center">
+            <p>Pág. {{currentPage}} de {{totalPages}}</p>
+            <form action="/" method="GET">
+                <label for="limit">Ver:</label>
+                <select name="limit" id="limit">
+                    <option value="5"> 5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                </select>
+                <button type="submit">Ir</button>
+            </form>
+        </div>
+
+
+    </nav>
+
+
+
+
+
+    <script>
+        var addToCartForms = document.querySelectorAll('form.addtocart-form');
+
+        addToCartForms.forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Evitar que el formulario se envíe automáticamente
+                var formAction = "/api/carts/{{session.user.cart}}/product/" + this.getAttribute('action'); // Obtener la URL original del formulario
+
+                var formData = new FormData(this); // Obtener los datos del formulario
+                // Enviar la solicitud a la API usando fetch
+                fetch(formAction, {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => {
+                        // Verificar si la solicitud fue exitosa
+                        if (!response.ok) {
+                            return response.json().then(error => {
+                                throw new Error(error.error);
+                            });
+                        }
+
+                        // Si la solicitud fue exitosa, muestro una alerta con SweetAlert2
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Producto agregado al carrito',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+
+                    })
+                    .catch(error => {
+                        console.error('Error:', error.message);
+                        // Si la solicitud no fue exitosa, muestro un error con SweetAlert2
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al agregar el producto al carrito',
+                            text: error.message,
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    });
+            });
+        });
+
+        var deleteProductForms = document.querySelectorAll('form.delete-form');
+
+        deleteProductForms.forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Evitar que el formulario se envíe automáticamente
+                var formAction = "/api/products/" + this.getAttribute('action'); // Obtener la URL original del formulario
+
+
+                //var formData = new FormData(this); // Obtener los datos del formulario
+                // Enviar la solicitud a la API usando fetch
+                fetch(formAction, {
+                    method: 'DELETE',
+                })
+
+                    .then(response => {
+                        // Verificar si la solicitud fue exitosa
+                        if (!response.ok) {
+                            return response.json().then(error => {
+                                throw new Error(error.error);
+                            });
+                        }
+
+                        // Si la solicitud fue exitosa, muestro una alerta con SweetAlert2
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Producto eliminado de la tienda',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+
+                    })
+                    .catch(error => {
+                        console.error('Error:', error.message);
+                        // Si la solicitud no fue exitosa, muestro un error con SweetAlert2
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al elimnar el producto de la tienda',
+                            text: error.message,
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    });
+            });
+        });
+
+    </script>
+
+
+
+</div>

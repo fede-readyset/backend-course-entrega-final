@@ -1,0 +1,227 @@
+openapi: 3.0.0
+info:
+  title: API de Carritos de Compras
+  description: API para la gestión de carritos de compras
+  version: 1.0.0
+paths:
+  /api/carts:
+    get:
+      tags:
+        - Carts
+      summary: Obtiene una lista de carritos
+      responses:
+        '200':
+          description: Listado de carritos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cart"
+        '500':
+          description: Fallo al obtener listado de carritos
+    post:
+      tags:
+        - Carts
+      summary: Crea un nuevo carrito
+      responses:
+        '200':
+          description: Carrito creado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        '500':
+          description: Fallo al crear el carrito
+
+  /api/carts/{cid}:
+    get:
+      tags:
+        - Carts
+      summary: Obtiene un carrito por ID
+      parameters:
+        - in: path
+          name: cid
+          schema:
+            type: string
+          required: true
+          description: ID del carrito
+      responses:
+        '200':
+          description: Carrito encontrado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        '404':
+          description: Carrito no encontrado
+        '500':
+          description: Error del servidor al buscar carrito especificado
+    put:
+      tags:
+        - Carts
+      summary: Actualiza los productos de un carrito por ID
+      parameters:
+        - in: path
+          name: cid
+          schema:
+            type: string
+          required: true
+          description: ID del carrito
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Cart"
+      responses:
+        '200':
+          description: Carrito actualizado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        '500':
+          description: Fallo al actualizar el carrito
+    delete:
+      tags:
+        - Carts
+      summary: Vacía un carrito por ID
+      parameters:
+        - in: path
+          name: cid
+          schema:
+            type: string
+          required: true
+          description: ID del carrito
+      responses:
+        '200':
+          description: Carrito vaciado correctamente
+        '500':
+          description: Fallo al vaciar el carrito
+
+  /api/carts/{cid}/product/{pid}:
+    post:
+      tags:
+        - Carts
+      summary: Agrega un producto al carrito
+      parameters:
+        - in: path
+          name: cid
+          schema:
+            type: string
+          required: true
+          description: ID del carrito
+        - in: path
+          name: pid
+          schema:
+            type: string
+          required: true
+          description: ID del producto
+      responses:
+        '200':
+          description: Producto añadido al carrito correctamente
+        '500':
+          description: Fallo al agregar el producto al carrito
+    delete:
+      tags:
+        - Carts
+      summary: Elimina un producto del carrito
+      parameters:
+        - in: path
+          name: cid
+          schema:
+            type: string
+          required: true
+          description: ID del carrito
+        - in: path
+          name: pid
+          schema:
+            type: string
+          required: true
+          description: ID del producto
+      responses:
+        '200':
+          description: Producto eliminado del carrito correctamente
+        '500':
+          description: Fallo al eliminar el producto del carrito
+
+  /api/carts/{cid}/purchase:
+    get:
+      tags:
+        - Carts
+      summary: Confirma la compra de un carrito
+      parameters:
+        - in: path
+          name: cid
+          schema:
+            type: string
+          required: true
+          description: ID del carrito
+      responses:
+        '200':
+          description: Compra confirmada con éxito
+        '500':
+          description: Fallo al finalizar la compra
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "60d21b4667d0d8992e610c85"
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+                description: ID del producto
+                example: "60d21b4667d0d8992e610c86"
+              qty:
+                type: number
+                description: Cantidad del producto
+                example: 2
+        total:
+          type: number
+          example: 200.50
+      required:
+        - products
+        - total
+      example:
+        _id: "60d21b4667d0d8992e610c85"
+        products:
+          - product: "60d21b4667d0d8992e610c86"
+            qty: 2
+          - product: "60d21b4667d0d8992e610c87"
+            qty: 1
+        total: 300.75
+
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "60d21b4667d0d8992e610c86"
+        name:
+          type: string
+          example: "Producto 1"
+        description:
+          type: string
+          example: "Descripción del producto 1"
+        price:
+          type: number
+          example: 100.25
+        category:
+          type: string
+          example: "Categoría 1"
+        stock:
+          type: integer
+          example: 50
+      required:
+        - name
+        - price
+        - category

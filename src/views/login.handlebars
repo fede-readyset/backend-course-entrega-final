@@ -1,0 +1,63 @@
+<div class="login-container">
+    <h3>Login</h3>
+
+    <form id="login-form" class="login-form">
+        <div class="login-form-input">
+            <input type="email" name="email" placeholder="Email" required>
+        </div>
+
+        <div class="login-form-input">
+            <input type="password" name="password" placeholder="Password" required>
+        </div>
+
+        <div class="login-form-button">
+            <button type="submit">Login</button>
+        </div>
+    </form>
+
+    <a href='/api/users/github' class="login-github-link">
+        <img src="/img/github-mark-white.png" alt="GitHub icon" class="icon">
+        Login with GitHub
+    </a>
+
+    <p>No tienes un usuario? <a href="/register">Regístrate</a></p>
+    <p>Olvidaste la contraseña? <a href="/reset-password"> Restablecer Contraseña</a></p>
+</div>
+
+
+<script>
+    document.getElementById('login-form').addEventListener('submit', async function(event) {
+        event.preventDefault(); // Evita el comportamiento por defecto de enviar el formulario
+
+        const form = event.target;
+        const formData = new FormData(form);
+
+        const data = {
+            email: formData.get('email'),
+            password: formData.get('password')
+        };
+
+        try {
+            const response = await fetch('/api/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Redirige a la URL proporcionada en la respuesta JSON
+                window.location.href = result.redirectUrl;
+            } else {
+                // Muestra un mensaje de error
+                alert(result.message || 'Login fallido');
+            }
+        } catch (error) {
+            console.error('Error en el login:', error);
+            alert('Error en el servidor. Inténtalo de nuevo más tarde.');
+        }
+    });
+</script>

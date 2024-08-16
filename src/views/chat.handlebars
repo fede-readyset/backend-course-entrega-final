@@ -1,0 +1,18 @@
+<div class="chat-container">
+    <h2>Chat de CoderMart</h2>
+
+    <div id="user" username="{{session.user.first_name}}"></div>
+
+    <div class="chat-messages">
+        <p id="messagesLogs"></p>
+    </div>
+
+    <div class="chat-input">
+
+        <input type="text" id="chatBox" placeholder="Mensaje">
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
+<script src="js/chat.js"></script>

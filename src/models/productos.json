@@ -1,0 +1,112 @@
+[
+  {
+    "title": "Leche",
+    "description": "Leche entera, 1 litro",
+    "price": 1.99,
+    "thumbnail": "leche.jpg",
+    "code": "1234567890",
+    "stock": 50,
+    "category": "Almacén",
+    "status": true,
+    "id": 1
+  },
+  {
+    "title": "Pan",
+    "description": "Pan de molde integral, 500g",
+    "price": 2.49,
+    "thumbnail": "pan.jpg",
+    "code": "0987654321",
+    "stock": 40,
+    "category": "Panadería",
+    "status": true,
+    "id": 2
+  },
+  {
+    "title": "Huevos",
+    "description": "Docena de huevos grandes, de gallinas criadas en libertad",
+    "price": 3.99,
+    "thumbnail": "huevos.jpg",
+    "code": "1357924680",
+    "stock": 30,
+    "category": "Verdulería",
+    "status": true,
+    "id": 3
+  },
+  {
+    "title": "Arroz",
+    "description": "Arroz blanco de grano largo, 1kg",
+    "price": 1.79,
+    "thumbnail": "arroz.jpg",
+    "code": "2468013579",
+    "stock": 60,
+    "category": "Almacén",
+    "status": true,
+    "id": 4
+  },
+  {
+    "title": "Pasta",
+    "description": "Spaghetti de trigo integral, 500g",
+    "price": 1.29,
+    "thumbnail": "pasta.jpg",
+    "code": "9876543210",
+    "stock": 35,
+    "category": "Almacén",
+    "status": true,
+    "id": 5
+  },
+  {
+    "title": "Tomate",
+    "description": "Tomate fresco de temporada",
+    "price": 0.79,
+    "thumbnail": "tomate.jpg",
+    "code": "0123456789",
+    "stock": 70,
+    "category": "Verdulería",
+    "status": true,
+    "id": 6
+  },
+  {
+    "title": "Lechuga",
+    "description": "Lechuga iceberg",
+    "price": 0.99,
+    "thumbnail": "lechuga.jpg",
+    "code": "4567890123",
+    "stock": 45,
+    "category": "Verdulería",
+    "status": true,
+    "id": 7
+  },
+  {
+    "title": "Manzanas",
+    "description": "Manzanas rojas, 1kg",
+    "price": 2.99,
+    "thumbnail": "manzanas.jpg",
+    "code": "7890123456",
+    "stock": 55,
+    "category": "Verdulería",
+    "status": true,
+    "id": 8
+  },
+  {
+    "title": "Pollo",
+    "description": "Pollo entero, 1kg",
+    "price": 5.49,
+    "thumbnail": "pollo.jpg",
+    "code": "3210987654",
+    "stock": 25,
+    "category": "Carnicería",
+    "status": true,
+    "id": 9
+  },
+  {
+    "title": "Aceite de oliva",
+    "description": "Aceite de oliva virgen extra, 500ml",
+    "price": 4.99,
+    "thumbnail": "aceite.jpg",
+    "code": "6543210988",
+    "stock": 20,
+    "category": "Almacén",
+    "status": true,
+    "id": 10
+  }
+]

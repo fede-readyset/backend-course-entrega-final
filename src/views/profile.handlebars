@@ -1,0 +1,39 @@
+<br>
+<div class="upload__container">
+    <h2>Tu perfil:</h2>
+    <div class="profile__info">
+        <div class="profile__avatar">
+            <img id="avatar" src="{{session.user.avatar_url}}" alt="Avatar">
+        </div>
+        <div class="profile__details">
+            <div class="profile__detail">
+                <span class="detail__label">Nombre: </span>
+                <span id="nombre">{{session.user.first_name}}</span>
+            </div>
+            <div class="profile__detail">
+                <span class="detail__label">Apellido: </span>
+                <span id="apellido">{{session.user.last_name}}</span>
+            </div>
+            <div class="profile__detail">
+                <span class="detail__label">Email: </span>
+                <span id="email">{{session.user.email}}</span>
+            </div>
+            <div class="profile__detail">
+                <span class="detail__label">Edad: </span>
+                <span id="edad">{{session.user.age}}</span>
+            </div>
+             <div class="profile__detail">
+                <span class="detail__label">Carrito ID: </span>
+                <span id="edad">{{session.user.cart}}</span>
+            </div>
+            <div class="profile__detail">
+                <span class="detail__label">Rol: </span>
+                <span id="rol">{{session.user.role}}</span>
+            </div>
+            <div class="profile__detail">
+                <span class="detail__label">Last login: </span>
+                <span id="rol"> {{session.user.last_connection}}</span>
+            </div>
+        </div>
+    </div>
+</div>

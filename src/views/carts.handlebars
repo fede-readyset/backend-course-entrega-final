@@ -1,0 +1,212 @@
+<br>
+
+<div class="cart-container">
+
+    <div class="cart-list-container">
+        <div class="cart-list-header">
+            <h3>Your cart:</h3>
+
+            <button class="btn clear-btn"> <span class="bi bi-trash"> Empty Cart</span></button>
+        </div>
+
+        {{#each carrito.products}}
+        <div class="horizontal-card">
+            <div class="thumbnail-container">
+                <img class="thumbnail" src="{{this.product.thumbnail}}" alt="Imagen de {{this.product.title}}">
+            </div>
+            <div class="horizontal-card-content">
+                <div class="content-left">
+                    <p><b>{{this.product.title}}</b></p>
+                    <p>Unit price: € {{this.product.price}}</p>
+
+                </div>
+                <div class="content-right">
+                    <p>Subtotal: € {{this.subtotal}}</p>
+
+                    <div class="quantity-controls">
+                        <button class="quantity-btn" data-action="decrease" data-index="{{this.product._id}}">-</button>
+                        <input type="number" class="quantity-input" value="{{this.qty}}">
+                        <button class="quantity-btn" data-action="increase" data-index="{{this.product._id}}">+</button>
+                        <div class="btn-group">
+                            <button class="update-btn" data-index="{{this.product._id}}">
+                                <span class="bi bi-arrow-clockwise"></span>
+                            </button>
+                            <button class="remove-btn" data-index="{{this.product._id}}">
+                                <span class="bi bi-trash"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+
+    <div class="cart-summary">
+        <h3>Cart summary:</h3>
+        <div class="total">
+            <p>Sub Total: EUR <span id="total-provisional" class="total-provisional">€{{provTotal}}</span></p>
+            <p>Shipping : Enter shipping address</span></p>
+            <p>Total: EUR <span id="total-provisional" class="total-provisional">€{{provTotal}}</span></p>
+
+
+        </div>
+        <div class="actions">
+            <button class="btn return-btn">Seguir comprando</button>
+            <button class="btn confirm-btn">Checkout</button>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const confirmButton = document.querySelector('.confirm-btn');
+        const clearButton = document.querySelector('.clear-btn');
+        const returnButton = document.querySelector('.return-btn');
+        const quantityControls = document.querySelectorAll('.quantity-controls');
+
+        if (quantityControls.length > 0) {
+            quantityControls.forEach(function (control) {
+                const decreaseBtn = control.querySelector('[data-action="decrease"]');
+                const increaseBtn = control.querySelector('[data-action="increase"]');
+                const updateBtn = control.querySelector('.update-btn');
+                const removeBtn = control.querySelector('.remove-btn');
+                const quantityInput = control.querySelector('.quantity-input');
+                const pid = decreaseBtn.getAttribute('data-index');
+
+                decreaseBtn.addEventListener('click', function () {
+                    let currentValue = parseInt(quantityInput.value);
+                    if (currentValue > 1) {
+                        quantityInput.value = currentValue - 1;
+                    }
+                });
+
+                increaseBtn.addEventListener('click', function () {
+                    let currentValue = parseInt(quantityInput.value);
+                    quantityInput.value = currentValue + 1;
+                });
+
+                updateBtn.addEventListener('click', function () {
+                    let updateArray = [{ product: { _id: pid }, qty: parseInt(quantityInput.value) }];
+
+                    let updateUrl = `/api/carts/{{session.user.cart}}`;
+
+                    console.log(`Update URL: ${updateUrl}`);
+                    console.log(`Update Array: ${updateArray}`)
+                    console.log(`New Qty: ${updateArray[0].qty}`)
+
+                    fetch(updateUrl, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(updateArray)
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Hubo un problema al actualizar el carrito.');
+                            }
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Cantidad actualizada',
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                        })
+                        .catch(error => {
+                            console.error("Error durante la actualización del carrito: ", error);
+                        });
+                });
+
+                removeBtn.addEventListener('click', function () {
+                    console.log(`Eliminar el producto ${pid} del carrito`);
+                    // Implementación del código para eliminar el producto del carrito
+                });
+            })
+        };
+
+        // Botón Checkout
+        confirmButton.addEventListener('click', function () {
+            var confirmPurchaseUrl = `/api/carts/{{session.user.cart}}/purchase`;
+            fetch(confirmPurchaseUrl, {
+                method: 'GET'
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        return Swal.fire({
+                            icon: 'error',
+                            title: 'Error al generar ticket de compra',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(() => {
+                            throw new Error('Hubo un problema al iniciar el checkout.');
+                        });
+                    } else {
+                        return Swal.fire({
+                            icon: 'success',
+                            title: 'Ticket de compra generado con éxito',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    }
+                })
+                .then(() => {
+                    setTimeout(function () { location.reload(); }, 2000);
+                })
+                .catch(error => {
+                    console.error("Error durante el proceso de checkout: ", error);
+                });
+        });
+
+
+        // Bóton para vaciar el carrito
+        clearButton.addEventListener('click', function () {
+            console.log("Limpiar carrito y volver al home");
+            Swal.fire({
+                title: "¿Estas seguro de querer vaciar el carrito?",
+                confirmButtonText: "Vaciar",
+                showCancelButton: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("confirmed");
+                    var cleanupUrl = `/api/carts/{{session.user.cart}}`;
+                    fetch(cleanupUrl, {
+                        method: 'DELETE'
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                return Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error al vaciar el carrito',
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                }).then(() => {
+                                    throw new Error('Hubo un problema al vaciar el carrito.');
+                                });
+                            } else {
+                                return Swal.fire({
+                                    title: "Carrito vaciado!",
+                                    icon: "success",
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                            }
+                        })
+                        .then(() => {
+                            setTimeout(function () { location.reload(); }, 2000);
+                        })
+                        .catch(error => {
+                            console.error('Error durante el vaciado del carrito:', error);
+                        });
+                }
+            });
+        });
+
+        returnButton.addEventListener('click', function () {
+            window.location.href = "/";
+        })
+    });
+</script>
