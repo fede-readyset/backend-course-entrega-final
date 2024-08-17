@@ -1,4 +1,5 @@
 <h2>Listado de Usuarios</h2>
+<button onclick="deleteInactiveUsers();">Eliminar Usuarios Inactivos</button>
 {{#if users.length}}
 <div class="container wide-container">
     <table class="user-table">
@@ -20,7 +21,9 @@
                 <td>{{this.last_name}}</td>
                 <td>{{this.email}}</td>
                 <td class="last-connection-col">{{this.last_connection}}</td>
-                <td>{{this.role}}</td>
+                <td>{{this.role}}
+                    
+                </td>
                 <td>
                     {{#if this.documents.length}}
                     {{#each this.documents}}
@@ -34,12 +37,19 @@
                     {{/if}}
                 </td>
                 <td class="action-icons actions-col">
-                    <a href="/users/edit/{{this._id}}" title="Modificar"><i class="fas fa-edit"></i></a>
-                    <a href="/users/delete/{{this._id}}" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
-                    <a href="/users/reset-password/{{this._id}}" title="Resetear Contraseña"><i
-                            class="fas fa-key"></i></a>
+                    <a href="/users/edit/{{this.id}}" title="Modificar"><i class="fas fa-edit"></i></a>
+                    <a href="#" onclick="deleteUser('{{this.id}}'); return false;" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
+                    <a href="/users/reset-password/{{this.id}}" title="Resetear Contraseña"><i class="fas fa-key"></i></a>
                     <a href="mailto:{{this.email}}" title="Enviar Email"><i class="fas fa-envelope"></i></a>
+                   
+                   {{#unless (eq this.role "admin")}}
+                        <a href="#" onclick="changeUserRole('{{this.id}}'); return false;" title="{{#if (eq this.role 'user')}}Upgrade a Premium{{else}}Downgrade a User{{/if}}">
+                            <i class="fas {{#if (eq this.role 'user')}}fa-star{{else}}fa-user{{/if}}"></i>
+                        </a>
+                    {{/unless}}
                 </td>
+                
+                
             </tr>
             {{/each}}
         </tbody>
@@ -48,3 +58,117 @@
 {{else}}
 <p>No hay usuarios registrados.</p>
 {{/if}}
+
+
+<script>
+function changeUserRole(userId) {
+    // Crear la solicitud PUT
+    fetch('/api/users/premium/' + userId, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json().then(data => {
+        // Asegura que tanto respuestas exitosas como fallidas tengan su contenido parseado a JSON
+        if (response.ok) {
+            return data; // Continuar con el procesamiento normal si la respuesta es exitosa
+        } else {
+            // Si la respuesta no es exitosa, extraer el mensaje de error del cuerpo JSON y lanzar un error
+            throw new Error(data.message+" "+data.reqDoc || `La solicitud falló con estado ${response.status}`);
+        }
+    }))
+    .then(data => {
+        // Mostrar una notificación de éxito con SweetAlert
+        Swal.fire({
+            title: '¡Éxito!',
+            text: 'El rol del usuario ha sido actualizado.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        }).then(result => {
+            if (result.isConfirmed) {
+                location.reload(); // Recargar la página para mostrar los cambios actualizados
+            }
+        });
+    })
+    .catch(error => {
+        console.error('Error al realizar la solicitud:', error);
+        // Mostrar el error con SweetAlert
+        Swal.fire({
+            title: 'Error',
+            text: error.message, // Mostrar el mensaje de error extraído
+            icon: 'error',
+            confirmButtonText: 'Cerrar'
+        });
+    });
+}
+
+
+
+function deleteUser(userId) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¿Quieres eliminar este usuario? (Esta acción eliminará también el carrito asociado)",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar!',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('/api/users/' + userId, {
+                method: 'DELETE',
+            })
+            .then(response => {
+                if (response.ok) {
+                    Swal.fire(
+                        '¡Eliminado!',
+                        'El usuario ha sido eliminado.',
+                        'success'
+                    ).then(() => window.location.reload());
+                } else {
+                    response.json().then(data => Swal.fire('Error', data.message, 'error'));
+                }
+            })
+            .catch(error => Swal.fire('Error', 'Error al eliminar el usuario: ' + error, 'error'));
+        }
+    });
+}
+
+function deleteInactiveUsers() {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¿Deseas eliminar todos los usuarios inactivos por más de 30 días? (Esta acción eliminará también los carritos asociados)",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar todo!',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('/api/users/delete-inactive', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    Swal.fire({
+                        title: '¡Éxito!',
+                        text: 'Todos los usuarios inactivos han sido eliminados.',
+                        icon: 'success'
+                    }).then(() => window.location.reload());
+                } else {
+                    response.json().then(data => Swal.fire('Error', data.message, 'error'));
+                }
+            })
+            .catch(error => Swal.fire('Error', 'Error al eliminar usuarios inactivos: ' + error.message, 'error'));
+        }
+    });
+}
+
+
+</script>

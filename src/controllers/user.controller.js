@@ -7,6 +7,7 @@ import multer from "multer";
 // Tercer practica integradora
 import EmailManager from "../services/email.js";
 import UsuarioModel from "../models/usuario.model.js";
+import CartModel from "../models/carritos.model.js";
 import generateResetToken from "../utils/tokenreset.js";
 const emailManager = new EmailManager();
 
@@ -233,9 +234,8 @@ class UserController {
             // Busco el usuario
             const user = await UsuarioModel.findById(uid);
             if (!user) {
-                return res.status(404).send("Usuario no encontrado");
+                return res.status(404).json({ success: "false", message: "Usuario no encontrado" });
             }
-
 
             let nuevoRol;
 
@@ -247,7 +247,7 @@ class UserController {
 
                     const tieneDocumentacion = requestedDocuments.every(doc => userDocuments.includes(doc));
                     if (!tieneDocumentacion) {
-                        return res.status(400).json({success:"false",message:"El usuario no cumple los requisitos para ser 'Premium'. Revisar la documentación requerida.", reqDoc:requestedDocuments});
+                        return res.status(400).json({success:"false", message:"El usuario no cumple los requisitos para ser 'Premium'. Revisar la documentación requerida.", reqDoc:requestedDocuments});
                     }
                     nuevoRol = "premium";
                     break;
@@ -259,7 +259,7 @@ class UserController {
             }
 
             const actualizado = await UsuarioModel.findByIdAndUpdate(uid, { role: nuevoRol });
-            res.json({success:"true",message:`Rol cambiado con éxito a ${nuevoRol}`,payload:actualizado});
+            res.status(200).json({success:"true",message:`Rol cambiado con éxito a ${nuevoRol}`,payload:actualizado});
 
         } catch (error) {
             res.status(500).json({ success: "false", message: "Error en el servidor", error: error });
@@ -321,7 +321,63 @@ class UserController {
 
     }
 
+    async deleteUser(req, res) {
+        const { uid } = req.params;
+        try {
+            // Busco el usuario para asegurarme de que existe antes de eliminarlo
+            const user = await UsuarioModel.findById(uid);
+            if (!user) {
+                return res.status(404).json({ success: false, message: "Usuario no encontrado" });
+            }
+    
+            // Eliminar el carrito asociado usando el ID almacenado en el usuario
+            if (user.cart) {
+                await CartModel.findByIdAndDelete(user.cart);
+            }
 
+            // Eliminar el usuario
+            await UsuarioModel.findByIdAndDelete(uid);
+            
+            // Envía una respuesta exitosa
+            return res.status(200).json({ success: true, message: "Usuario eliminado con éxito" });
+        } catch (error) {
+            // Manejo de errores en caso de fallos en el servidor o la base de datos
+            return res.status(500).json({ success: false, message: "Error en el servidor al intentar eliminar al usuario", error: error.message });
+        }
+    }
+
+
+    async deleteInactive(req,res) {
+        try {
+            const dateThreshold = new Date();
+            dateThreshold.setDate(dateThreshold.getDate() - 30);
+    
+            // Encuentro los usuarios inactivos y guardo los IDs de sus carritos
+            const inactiveUsers = await UsuarioModel.find({ last_connection: { $lt: dateThreshold } }, 'cart');
+            const cartIds = inactiveUsers.map(user => user.cart).filter(cart => cart != null);
+
+            // Elimino los carritos asociados
+            if (cartIds.length > 0) {
+                await CartModel.deleteMany({
+                    _id: { $in: cartIds }
+                });
+            }
+
+            
+            const result = await UsuarioModel.deleteMany({
+                last_connection: { $lt: dateThreshold }
+            });
+    
+            if (result.deletedCount > 0) {
+                res.status(200).json({ success: true, message: `Se eliminaron ${result.deletedCount} usuarios inactivos.` });
+            } else {
+                res.status(404).json({ success: false, message: 'No se encontraron usuarios inactivos para eliminar.' });
+            }
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Error al eliminar usuarios inactivos.', error: error.message });
+        }
+    }
+    
 
 }
 

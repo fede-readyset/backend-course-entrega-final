@@ -121,6 +121,7 @@ class ViewsController {
             first_name: user.first_name,
             last_name: user.last_name,
             email: user.email,
+            id: user._id,
             documents: user.documents.map(doc => ({
                 name: doc.name,
                 reference: doc.reference
