@@ -139,11 +139,3 @@ const initializePassport = () => {
 }
 
 export default initializePassport;
-
-
-
-// App ID: 893099
-
-// Client ID: Iv23ctrSpvxsHRzH2bWN
-
-// ebd513f63a6132e3192d9e38bc16c23e23d22522

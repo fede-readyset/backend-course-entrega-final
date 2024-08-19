@@ -1,0 +1,73 @@
+<form id="edit-form">
+    <div class="upload__container">
+        <h2>Editar Usuario</h2><br>
+        
+        <div class="upload__container--title">
+            <input type="text" name="first_name" placeholder="Nombre" value="{{user.first_name}}" required>
+        </div>
+        <div class="upload__container--title">
+            <input type="text" name="last_name" placeholder="Apellido" value="{{user.last_name}}" required>
+        </div>
+        <div class="upload__container--title">
+            <input type="email" name="email" placeholder="Email" value="{{user.email}}" required>
+        </div>
+        <div class="login-form-button">
+            <button type="submit">Actualizar</button>
+        </div>
+    </div>
+</form>
+
+<script>
+document.getElementById('edit-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Previene que el formulario se envíe de la forma tradicional
+    
+    // Obtener los valores del formulario
+    const firstName = event.target.first_name.value;
+    const lastName = event.target.last_name.value;
+    const email = event.target.email.value;
+
+    // Crear el payload
+    const payload = {
+        first_name: firstName,
+        last_name: lastName,
+        email: email
+    };
+
+    
+    const userId = '{{user._id}}'; 
+
+    // Hacer la solicitud PUT al endpoint
+    fetch(`/api/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Error al actualizar el usuario');
+        }
+    })
+    .then(data => {
+        // Manejo de la respuesta exitosa
+        Swal.fire({
+            title: '¡Éxito!',
+            text: 'El usuario ha sido actualizado correctamente.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        })
+    })
+    .catch(error => {
+        // Manejo de errores
+        Swal.fire({
+            title: 'Error',
+            text: error.message,
+            icon: 'error',
+            confirmButtonText: 'Cerrar'
+        });
+    });
+});
+</script>

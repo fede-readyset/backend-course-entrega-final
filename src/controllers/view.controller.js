@@ -78,6 +78,19 @@ class ViewsController {
             // Busco el carrito
             const carrito = await cartRepository.findById(cid);
 
+            // Verificar si el carrito está vacío o no existe
+            if (!carrito || carrito.products.length === 0) {
+                return res.render("carts", {
+                    cid: cid,
+                    carrito: {
+                        products: []
+                    },
+                    provTotal: 0,
+                    session: req.session
+                });
+            }
+
+
             // Obtengo el subtotal de cada item
             carrito.products.forEach(product => {
                 product.subtotal = Math.round(product.qty * product.product.price);
@@ -89,7 +102,7 @@ class ViewsController {
             // Envio la data para ser renderizada
             res.render("carts", {
                 cid: cid,
-                carrito: carrito,
+                carrito: carrito.toObject(),
                 provTotal: provTotal,
                 session: req.session
             });
@@ -97,8 +110,8 @@ class ViewsController {
         } catch (error) {
             res.status(500).json({
                 status: 'error',
-                error: "Error interno del servidor",
-                payload: error
+                error: "Error interno del servidor al renderizar el carrito",
+                payload: error.message
             });
             req.logger.error("Error interno del servidor al renderizar el carrito");
         }
@@ -133,6 +146,45 @@ class ViewsController {
 
         res.render("users", {session: req.session, users});
     }
+
+
+    // Vista de usuarios
+    async editUser(req,res) {
+        if (!req.session.login) return res.redirect("/login");
+
+        const uid = req.params.uid;
+        
+        try {
+            let user = await userService.getUserById(uid); // Asume que tienes un servicio que puede obtener un usuario por ID
+            if (!user) {
+                res.status(404).send("Usuario no encontrado");
+                return;
+            }
+    
+            // Preparar la información del usuario para la vista
+            let userData = {
+                first_name: user.first_name,
+                last_name: user.last_name,
+                email: user.email,
+                age: user.age,
+                _id: user._id,
+                documents: user.documents.map(doc => ({
+                    name: doc.name,
+                    reference: doc.reference
+                })),
+                role: user.role,
+                last_connection: user.last_connection ? moment(user.last_connection).format('YYYY-MM-DD HH:mm') : 'N/A'
+            };
+    
+            res.render("editUser", {session: req.session, user: userData});
+        } catch (error) {
+            console.error('Error al obtener el usuario:', error);
+            res.status(500).send("Error interno del servidor");
+        }
+
+    }
+
+
 
     // Vista del login
     async renderLogin(req, res) {

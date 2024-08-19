@@ -50,6 +50,12 @@ const usuariosSchema = new mongoose.Schema({
 
 })
 
+usuariosSchema.methods.toSafeObject = function () {
+    const { password, __v, ...safeObject } = this.toObject();
+    return safeObject;
+  };
+  
+
 
 const UsuarioModel = mongoose.model("usuarios", usuariosSchema);
 

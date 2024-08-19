@@ -2,7 +2,7 @@ import CartRepository from "../repositories/cart.repository.js";
 import ProductRepository from "../repositories/product.repository.js";
 import TicketsModel from "../models/tickets.model.js";
 import CarritosModel from "../models/carritos.model.js";
-import EmailManager from "../services/email.js";
+import EmailManager from "./email.service.js";
 const emailManager = new EmailManager();
 
 
@@ -80,15 +80,23 @@ export class CartService {
         return await this.cartRepository.updateById(cartId, { $set: { products: [] } });
     }
 
-    async changeProducts(cartId, newProducts) {
+    async changeProducts(cartId, updatedProducts) {
         const cart = await this.cartRepository.findById(cartId);
         if (!cart) throw new Error("Carrito inexistente");
 
-        cart.products = [];
-        for (const element of newProducts) {
-            const product = await this.productRepository.findById(element.product._id);
-            if (!product) throw new Error(`Producto ${element.product._id} inexistente`);
-            cart.products.push({ product, qty: element.qty });
+
+        // Itero sobre los productos que se desean actualizar
+        for (const updatedProduct of updatedProducts) {
+            // Busco el producto en el carrito
+            const cartProduct = cart.products.find(p => p.product._id.toString() === updatedProduct.product._id);
+
+            if (cartProduct) {
+                // Actualizo la cantidad si el producto está en el carrito
+                cartProduct.qty = updatedProduct.qty;
+            } else {
+                // Devuelvo un error si el producto no está en el carrito
+                throw new Error(`Producto ${updatedProduct.product._id} no encontrado en el carrito.`);
+            }
         }
 
         return await this.cartRepository.save(cart);
@@ -111,10 +119,15 @@ export class CartService {
     }
 
     async countProducts(cartId) {
-        const cart = await this.cartRepository.findById(cartId);
-        if (!cart) throw new Error("Carrito inexistente");
-        let qty=cart.products.reduce((total,product) => total+product.qty,0);
-        return qty;
+        try {
+            const cart = await this.cartRepository.findById(cartId);
+            if (!cart) throw new Error("Carrito inexistente");
+            let qty=cart.products.reduce((total,product) => total+product.qty,0);
+            return qty;
+        } catch (error) {
+            return 0;
+        }
+        
     }
 
     async confirmPurchase(cartId, purchaser) {

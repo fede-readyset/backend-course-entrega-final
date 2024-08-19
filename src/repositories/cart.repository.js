@@ -8,12 +8,11 @@ class CartRepository {
     async findById(id) {
         try {
             
-            const carrito = await CarritosModel.findById(id).populate("products.product").lean();
+            const carrito = await CarritosModel.findById(id).populate("products.product");
 
             if (!carrito) {
-                // Lanza un error con un tipo específico o un mensaje que puedes identificar
                 const error = new Error(`Carrito no encontrado.`);
-                error.statusCode = 404;  // Añade un código de estado específico
+                error.statusCode = 404;
                 throw error;
             }
             return carrito;

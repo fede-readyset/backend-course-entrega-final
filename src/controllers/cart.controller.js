@@ -103,6 +103,7 @@ export class CartController {
 
     async addProductToCart(req, res) {
         const { cid, pid } = req.params;
+        console.log(req.session.user);
         const buyerEmail = req.session.user.email;
         try {
             await this.cartService.addProductToCart(cid, pid, buyerEmail);
@@ -185,6 +186,7 @@ export class CartController {
     async changeProducts(req, res) {
         const cid = req.params.cid;
         const newProducts = req.body;
+
         try {
             await this.cartService.changeProducts(cid, newProducts);
             res.status(200).json({
@@ -198,7 +200,7 @@ export class CartController {
                 message: "Fallo al actualizar el carrito. Error interno del servidor.",
                 error: error.message
             });
-            req.logger.error("Error interno. Fallo al eliminar el producto del carrito");
+            req.logger.error("Error interno. Fallo al actualizar los productos en el carrito");
         }
     }
 

@@ -61,11 +61,11 @@ class EmailManager {
             const mailOptions = {
                 from: "CoderMart <torres.federico@gmail.com>",
                 to: emailData.purchaser,
-                subject: "Confirmación de tu compra",
+                subject: "CoderMart - Detalles de tu pedido",
                 html:`
                     <h1>CoderMart - Confirmación de compra </h1>
                     <p>Gracias por tu compra ${emailData.purchaser} </p>
-                    <p>Número de tu orden: ${emailData.code} </p>
+                    <p>El número de tu orden es: ${emailData.code} </p>
                     <p>Detalle de tu compra: </p>
                     ${productsTable}
                 `
@@ -79,6 +79,7 @@ class EmailManager {
 
     async sendResetEmail (email, first_name, token) {
         try {
+
             const mailOptions = {
                 from: "CoderMart <torres.federico@gmail.com>",
                 to: email,
@@ -90,7 +91,7 @@ class EmailManager {
                     te enviamos el token para que restablezcas tu password 
                     <strong>${token}</strong> </p>
                     <p> Este código expira en 1 hora.</p>
-                    <a href="http://localhost:8080/password"> Restablecer contraseña</a>
+                    <a href="${configObject.base_url}/password"> Restablecer contraseña</a>
                 `
             }
 

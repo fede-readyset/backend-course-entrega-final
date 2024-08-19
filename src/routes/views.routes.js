@@ -54,6 +54,8 @@ router.get("/newproduct", checkUserRole(['admin','premium']), viewsController.re
 router.get("/accessdenied", viewsController.renderAccessDenied);
 router.get("/mockingproducts", viewsController.mockingProducts);
 router.get("/users", checkUserRole(['admin']),viewsController.renderUsers);
+router.get("/edituser/:uid",viewsController.editUser);
+
 
 // Ruta para cargar nuevos productos
 router.post("/newproduct", multer({storage}).single("image"), async (req,res) => {

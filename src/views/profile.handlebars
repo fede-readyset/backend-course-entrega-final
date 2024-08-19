@@ -22,18 +22,25 @@
                 <span class="detail__label">Edad: </span>
                 <span id="edad"> {{session.user.age}}</span>
             </div>
-             <div class="profile__detail">
+            {{!-- <div class="profile__detail">
                 <span class="detail__label">Carrito ID: </span>
                 <span id="edad"> {{session.user.cart}}</span>
             </div>
-            <div class="profile__detail">
+             --}}
+             <div class="profile__detail">
                 <span class="detail__label">Rol: </span>
-                <span id="rol"> {{session.user.role}}</span>
+                <span id="rol">  <i class="fas {{#if (eq session.user.role 'user')}}fa-user{{else}} {{#if (eq session.user.role 'premium')}} fa-star {{else}} fa-cog{{/if}}{{/if}}"></i>  {{session.user.role}}</span>
             </div>
             <div class="profile__detail">
                 <span class="detail__label">Last login: </span>
                 <span id="rol"> {{session.user.last_connection}}</span>
             </div>
+            
+        </div>
+
+        <div class="profile__edit-button">
+            <a href="/edituser/{{session.user._id}}" class="button-link btn-primary" title="Editar"><i class="fas fa-edit"></i></a>
+
         </div>
     </div>
 </div>

@@ -5,25 +5,25 @@ import multer from "multer";
 
 
 // Tercer practica integradora
-import EmailManager from "../services/email.js";
+import EmailManager from "../services/email.service.js";
 import UsuarioModel from "../models/usuario.model.js";
 import CartModel from "../models/carritos.model.js";
 import generateResetToken from "../utils/tokenreset.js";
 const emailManager = new EmailManager();
 
+import UserService from "../services/user.service.js";
+const userService = new UserService();
 
 class UserController {
     async profile(req, res) {
         if (!req.session.login) {
             return res.redirect("login");
         } else {
-            
-            return res.render("profile", { session:req.session });
+            return res.render("profile", { session: req.session });
         }
     }
 
     async register(req, res) {
-
         passport.authenticate("register", { failureRedirect: "/failedregister" }, async (err, user, info) => {
             if (err) {
                 return res.status(500).send(err.message);
@@ -42,10 +42,11 @@ class UserController {
                     age: user.age,
                     role: user.role,
                     cart: user.cart,
-                    avatar_url: user.avatar_url
+                    avatar_url: user.avatar_url,
+                    _id: user._id
                 };
                 req.session.login = true;
-                res.status(200).json({success:true,message:"Usuario generado con éxito", payload:req.session.user});
+                res.status(200).json({ success: true, message: "Usuario generado con éxito", payload: req.session.user });
                 //res.send("<p>Usuario creado con éxito. Redireccionando...</p>         <meta http-equiv='refresh' content='2;url=/profile'>");
 
             })
@@ -74,7 +75,7 @@ class UserController {
                 }
 
                 try {
-                    const userFound = await UsuarioModel.findById(user._id); 
+                    const userFound = await UsuarioModel.findById(user._id);
                     if (userFound) {
                         userFound.last_connection = new Date();
                         await userFound.save();
@@ -87,16 +88,17 @@ class UserController {
                         role: user.role,
                         cart: user.cart,
                         avatar_url: user.avatar_url,
+                        _id: user._id,
                         last_connection: userFound.last_connection
                     };
                     req.session.login = true;
-                    
+
                 } catch (error) {
                     return res.status(500).json({ success: false, message: "Error actualizando la última conexión" });
                 }
 
 
-                
+
 
 
                 return res.status(200).json({
@@ -151,6 +153,9 @@ class UserController {
 
     async requestPasswordReset(req, res) {
         const { email } = req.body;
+        console.log(email);
+
+        console.log("HOLA");
         try {
             // Busco al usuario por email
             const user = await UsuarioModel.findOne({ email });
@@ -247,7 +252,7 @@ class UserController {
 
                     const tieneDocumentacion = requestedDocuments.every(doc => userDocuments.includes(doc));
                     if (!tieneDocumentacion) {
-                        return res.status(400).json({success:"false", message:"El usuario no cumple los requisitos para ser 'Premium'. Revisar la documentación requerida.", reqDoc:requestedDocuments});
+                        return res.status(400).json({ success: "false", message: "El usuario no cumple los requisitos para ser 'Premium'. Revisar la documentación requerida.", reqDoc: requestedDocuments });
                     }
                     nuevoRol = "premium";
                     break;
@@ -259,7 +264,7 @@ class UserController {
             }
 
             const actualizado = await UsuarioModel.findByIdAndUpdate(uid, { role: nuevoRol });
-            res.status(200).json({success:"true",message:`Rol cambiado con éxito a ${nuevoRol}`,payload:actualizado});
+            res.status(200).json({ success: "true", message: `Rol cambiado con éxito a ${nuevoRol}`, payload: actualizado });
 
         } catch (error) {
             res.status(500).json({ success: "false", message: "Error en el servidor", error: error });
@@ -329,7 +334,7 @@ class UserController {
             if (!user) {
                 return res.status(404).json({ success: false, message: "Usuario no encontrado" });
             }
-    
+
             // Eliminar el carrito asociado usando el ID almacenado en el usuario
             if (user.cart) {
                 await CartModel.findByIdAndDelete(user.cart);
@@ -337,7 +342,7 @@ class UserController {
 
             // Eliminar el usuario
             await UsuarioModel.findByIdAndDelete(uid);
-            
+
             // Envía una respuesta exitosa
             return res.status(200).json({ success: true, message: "Usuario eliminado con éxito" });
         } catch (error) {
@@ -347,11 +352,11 @@ class UserController {
     }
 
 
-    async deleteInactive(req,res) {
+    async deleteInactive(req, res) {
         try {
             const dateThreshold = new Date();
             dateThreshold.setDate(dateThreshold.getDate() - 30);
-    
+
             // Encuentro los usuarios inactivos y guardo los IDs de sus carritos
             const inactiveUsers = await UsuarioModel.find({ last_connection: { $lt: dateThreshold } }, 'cart');
             const cartIds = inactiveUsers.map(user => user.cart).filter(cart => cart != null);
@@ -363,11 +368,11 @@ class UserController {
                 });
             }
 
-            
+
             const result = await UsuarioModel.deleteMany({
                 last_connection: { $lt: dateThreshold }
             });
-    
+
             if (result.deletedCount > 0) {
                 res.status(200).json({ success: true, message: `Se eliminaron ${result.deletedCount} usuarios inactivos.` });
             } else {
@@ -377,7 +382,38 @@ class UserController {
             res.status(500).json({ success: false, message: 'Error al eliminar usuarios inactivos.', error: error.message });
         }
     }
-    
+
+    // Listar usuarios
+    async listUsers(req, res) {
+        try {
+            res.status(200).json(
+                (await userService.getAllUsers()).map(user => {
+                    const { age, cart, password, __v, resetToken, documents, last_connection, _id, ...safeUser } = user._doc || user.toObject();
+                    return safeUser;
+                })
+            );
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Error al listar usuarios', error: error.message })
+        }
+
+    }
+
+    // Editar un usuario
+    async editUser(req, res) {
+        try {
+            const { uid } = req.params;
+            console.log(uid);
+            const updatedUser = await userService.updateUserById(uid,req.body);
+
+            res.status(200).json({"success":true, "message": "Usuario modificado con exito", "payload": updatedUser});
+
+            
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Error al modificar usuario', error: error.message })
+
+        }
+    }
+
 
 }
 

@@ -1,5 +1,10 @@
-<h2>Listado de Usuarios</h2>
-<button onclick="deleteInactiveUsers();">Eliminar Usuarios Inactivos</button>
+<h2 class="text-center">Listado de Usuarios</h2>
+<div class="text-center mb-3">
+    <button onclick="deleteInactiveUsers();" class="btn btn-danger btn-icon">
+        <i class="fas fa-user-slash"></i> Eliminar Usuarios Inactivos
+    </button>
+</div>
+
 {{#if users.length}}
 <div class="container wide-container">
     <table class="user-table">
@@ -21,9 +26,7 @@
                 <td>{{this.last_name}}</td>
                 <td>{{this.email}}</td>
                 <td class="last-connection-col">{{this.last_connection}}</td>
-                <td>{{this.role}}
-                    
-                </td>
+                <td><i class="fas {{#if (eq this.role 'user')}}fa-user{{else}} {{#if (eq this.role 'premium')}} fa-star {{else}} fa-cog{{/if}}{{/if}}"></i> {{this.role}}</td>
                 <td>
                     {{#if this.documents.length}}
                     {{#each this.documents}}
@@ -33,19 +36,24 @@
                      
                     {{/each}}
                     {{else}}
-                    <p>---</p>
+                    <p>-</p>
                     {{/if}}
                 </td>
                 <td class="action-icons actions-col">
-                    <a href="/users/edit/{{this.id}}" title="Modificar"><i class="fas fa-edit"></i></a>
+                    <a href="/edituser/{{this.id}}" title="Modificar"><i class="fas fa-edit"></i></a>
                     <a href="#" onclick="deleteUser('{{this.id}}'); return false;" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
-                    <a href="/users/reset-password/{{this.id}}" title="Resetear Contraseña"><i class="fas fa-key"></i></a>
+{{!--                     <a href="/api/users/reset-password/{{this.id}}" title="Resetear Contraseña"><i class="fas fa-key"></i></a>--}}                    
+                    <a href="#" onclick="resetPassword('{{this.email}}'); return false;" title="Resetear Contraseña">
+                        <i class="fas fa-key"></i>
+                    </a>
+ 
                     <a href="mailto:{{this.email}}" title="Enviar Email"><i class="fas fa-envelope"></i></a>
                    
                    {{#unless (eq this.role "admin")}}
                         <a href="#" onclick="changeUserRole('{{this.id}}'); return false;" title="{{#if (eq this.role 'user')}}Upgrade a Premium{{else}}Downgrade a User{{/if}}">
-                            <i class="fas {{#if (eq this.role 'user')}}fa-star{{else}}fa-user{{/if}}"></i>
+                            <i class="fa {{#if (eq this.role 'user')}}fa-star{{else}}fa-user{{/if}}"></i>
                         </a>
+
                     {{/unless}}
                 </td>
                 
@@ -170,5 +178,35 @@ function deleteInactiveUsers() {
     });
 }
 
-
+function resetPassword(email) {
+    console.log(email);
+    fetch('/api/users/requestPasswordReset', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: email })
+    })
+    .then(response => {
+        console.log(response)
+        if (response.ok) {
+            Swal.fire({
+                title: '¡Éxito!',
+                text: 'Se ha enviado un correo para restablecer la contraseña.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        } else {
+            throw new Error('Error al solicitar el restablecimiento de la contraseña');
+        }
+    })
+    .catch(error => {
+        Swal.fire({
+            title: 'Error',
+            text: error.message,
+            icon: 'error',
+            confirmButtonText: 'Cerrar'
+        });
+    });
+}
 </script>

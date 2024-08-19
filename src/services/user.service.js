@@ -15,6 +15,16 @@ class UserService {
         }
     }
 
+    // Obtener un usuario por su ID
+    async getUserById(uid) {
+        try {
+            const result = await this.userRepository.findById(uid);
+            return result;
+        } catch (error) {
+            throw new Error('Error al obtener los usuarios');
+        }
+    }
+
     // Eliminar un usuario por su ID
     async deleteUserById(id) {
         try {

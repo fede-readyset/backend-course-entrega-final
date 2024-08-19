@@ -9,6 +9,7 @@ import checkUserRole from "../middlewares/rolecheck.js";
 const router = express.Router();
 import upload from "../middlewares/multer.js";
 
+router.get("/", userController.listUsers);
 router.get("/profile", userController.profile);
 router.get("/failedregister", userController.failedRegister);
 router.get("/github", userController.loginWithGitHub);
@@ -16,6 +17,7 @@ router.post("/login", userController.login);
 router.post("/requestPasswordReset", userController.requestPasswordReset);
 router.post("/reset-password", userController.resetPassword);
 router.post("/:uid/documents", upload.fields([{ name: "document" }, { name: "products" }, { name: "profile" }]), userController.uploadDocuments);
+router.put("/:uid", userController.editUser);
 router.put("/premium/:uid", userController.changePremiumRole);router.delete('/delete-inactive',  userController.deleteInactive);
 router.delete('/delete-inactive',  userController.deleteInactive);
 router.delete('/:uid', checkUserRole(['admin']), userController.deleteUser);

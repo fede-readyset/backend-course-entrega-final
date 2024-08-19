@@ -70,10 +70,9 @@ nav a:hover {
 
 
 #mini-avatar {
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    /* Para hacerlo circular */
     overflow: hidden;
 }
 
@@ -102,14 +101,16 @@ nav a:hover {
     /* Para que la imagen se ajuste correctamente al contenedor */
 }
 
+
 .profile__miniavatar {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
-    /* Para hacerlo circular */
-    overflow: hidden;
-    /* Para ocultar cualquier parte de la imagen que se salga del borde circular */
+    margin-right: 8px;
 }
+
+
+
 
 .profile__miniavatar img {
     width: 100%;
@@ -341,7 +342,9 @@ nav a:hover {
     background-color: #e60023;
 }
 
-
+.btn:disabled {
+    background-color: #999;
+}
 
 
 
@@ -972,4 +975,61 @@ body {
 
 .access-denied-content .btn-primary:hover {
     background-color: #0056b3;
+}
+
+
+
+.icon-overlay {
+    position: absolute;
+    bottom: 0; /* Posición en la parte inferior */
+    right: 0; /* Posición en la parte derecha */
+    background-color: white; /* Fondo blanco para que el ícono resalte */
+    border-radius: 50%; /* Hace el fondo del ícono circular */
+    padding: 3px;
+    font-size: 12px; /* Tamaño del ícono */
+    color: black; /* Color del ícono */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-text a {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.navbar-text {
+    display: flex;
+    align-items: center;
+}
+
+
+.navbar-nav {
+    align-items: center;
+}
+
+.navbar-nav.ml-auto {
+    margin-left: auto; /* Asegura que los elementos de la derecha se alineen a la derecha */
+}
+.dropdown-toggle::after {
+    display: none;
+}
+
+
+.profile-container {
+    position: relative;
+    display: inline-block;
+}
+
+
+.icon-overlay {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: white; /* Opcional: un fondo para que el ícono resalte */
+    border-radius: 50%;
+    padding: 2px;
+    font-size: 12px; /* Ajusta el tamaño del ícono según sea necesario */
+    color: black; /* Color del ícono */
 }

@@ -355,3 +355,47 @@
 {"level":"error","message":"Fallo al finalizar la compra. Error interno del servidor. email is not defined","stack":"ReferenceError: email is not defined\n    at CartService.confirmPurchase (file:///Users/federicotorres/Backend-course/backend-course-entrega-final/src/services/cart.service.js:164:54)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async CartController.confirmPurchase (file:///Users/federicotorres/Backend-course/backend-course-entrega-final/src/controllers/cart.controller.js:211:28)"}
 {"level":"error","message":"Fallo al finalizar la compra. Error interno del servidor. email is not defined","stack":"ReferenceError: email is not defined\n    at CartService.confirmPurchase (file:///Users/federicotorres/Backend-course/backend-course-entrega-final/src/services/cart.service.js:164:54)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async CartController.confirmPurchase (file:///Users/federicotorres/Backend-course/backend-course-entrega-final/src/controllers/cart.controller.js:211:28)"}
 {"level":"error","message":"#unless requires exactly one argument","name":"Error"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error","message":"Error interno. Fallo al eliminar el producto del carrito"}
+{"level":"error","message":"Error interno. Fallo al eliminar el producto del carrito"}
+{"level":"error","message":"Error interno. Fallo al eliminar el producto del carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"body":"\nClaro, te puedo guiar sobre cómo configurar una petición PUT en Postman para actualizar un carrito utilizando el endpoint que mencionaste. La petición debe ser enviada al endpoint que maneja las actualizaciones de los productos dentro de un carrito, el cual espera recibir el ID del carrito como parámetro en la URL y los nuevos productos en el cuerpo de la petición.\n\nPaso 1: Configurar Postman\nPrimero, asegúrate de tener Postman instalado y abierto. Luego, sigue estos pasos:\n\nCrear una nueva petición:\n\nHaz clic en el botón New y selecciona Request.\nNombra tu petición, por ejemplo, \"Actualizar Carrito\".\nGuarda la petición en una colección si es necesario.\nEstablece el método de la petición a PUT.\nConfigurar la URL de la petición:\n\nSupongamos que tu servidor está corriendo localmente en el puerto 3000. La URL podría ser algo como: http:\nPaso 2: Escribir el cuerpo de la petición\nEn el cuerpo de la petición, necesitarás enviar los productos como un array de objetos, cada uno conteniendo un ID de producto y la cantidad deseada. Aquí te muestro cómo configurarlo:\n\nSelecciona la pestaña ‘Body’ en Postman.\n\nElige raw y luego cambia el formato a JSON desde el menú desplegable que se encuentra a la derecha del área de texto.\n\nIngresa los datos. Suponiendo que deseas enviar dos productos, el cuerpo de tu petición podría verse así:\n\njson\nCopiar código\n[\n    {\n        \"product\": {\n            \"_id\": \"661ff0330f5fa5cd95fabee2\"\n        },\n        \"qty\": 2\n    },\n    {\n        \"product\": {\n            \"_id\": \"662822f456ef40e463703a7f\"\n        },\n        \"qty\": 5\n    }\n]","expose":true,"level":"error","status":400,"statusCode":400,"type":"entity.parse.failed"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
