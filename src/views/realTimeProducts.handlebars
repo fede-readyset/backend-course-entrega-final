@@ -1,11 +1,15 @@
 
 <div class="realtime__container">
     <h2>Monitoreo de stock de productos en tiempo real</h2>
+    <p>Sólo se muestran tus productos</p>
 
     <ol id="lista-productos" class="lista-productos">
         <!-- Aquí se actualizarán dinámicamente los productos -->
     </ol>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+        const owner = "{{#unless (eq session.user.role 'admin')}}{{session.user.email}}{{else}}admin{{/unless}}"; 
+    </script>
     <script src="js/main.js"></script>
 </div>

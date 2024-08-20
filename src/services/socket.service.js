@@ -10,19 +10,28 @@ class SocketService {
 
     initializeSocketEvents() {
         this.io.on("connection", async (socket) => {
-            console.log("Nuevo usuario conectado");
 
-            socket.on("Request", async () => {
-                const products = await ProductosModel.find().lean();
+            // Cuando recibo una solicitud del cliente de Realtime Products
+            socket.on("Request", async (data, user) => {
+                console.log (user);
+                let products =[];
+                if(user=="admin"){
+                    products = await ProductosModel.find().lean();
+                } else {
+                    products = await ProductosModel.find({owner:user}).lean();
+                }
+                
                 socket.emit("Productos", products);
             });
 
+            // Inicialización del chat
             socket.on("init", async (data) => {
                 const messagesLogs = await MensajesModel.find().lean();
                 this.io.emit("messagesLogs", messagesLogs);
 
             });
 
+            //  Cuando recibo un Mensaje
             socket.on("message", async (data) => {
                 const newMessage = new MensajesModel({
                     user: data.user,

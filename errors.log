@@ -402,3 +402,11 @@
 {"level":"error","message":"Fallo al eliminar producto"}
 {"level":"error","message":"Fallo al eliminar producto"}
 {"level":"error","message":"Fallo al eliminar producto"}
+{"column":70,"endColumn":72,"endLineNumber":29,"level":"error","lineNumber":29,"message":"if doesn't match unless - 29:70","name":"Error"}
+{"column":70,"endColumn":72,"endLineNumber":29,"level":"error","lineNumber":29,"message":"if doesn't match unless - 29:70","name":"Error"}
+{"column":70,"endColumn":72,"endLineNumber":29,"level":"error","lineNumber":29,"message":"if doesn't match unless - 29:70","name":"Error"}
+{"column":70,"endColumn":72,"endLineNumber":29,"level":"error","lineNumber":29,"message":"if doesn't match unless - 29:70","name":"Error"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}
+{"level":"error","message":"Error interno del servidor al renderizar el carrito"}

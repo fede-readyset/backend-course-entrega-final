@@ -1,9 +1,4 @@
-// Fragmento de código copiado del After del profe
-// Falta acomodar e integrar en app.js
-
-
-
-
+/* 
 class SocketManager {
     constructor(httpServer) {
         this.io = socket(httpServer);
@@ -35,3 +30,4 @@ class SocketManager {
 }
 export default SocketManager;
 
+ */

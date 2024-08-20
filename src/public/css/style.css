@@ -157,7 +157,7 @@ nav a:hover {
     border-radius: 5px;
     padding: 10px;
 }
-
+/* 
 .lista-productos {
     list-style-type: none;
     padding: 0;
@@ -180,6 +180,81 @@ nav a:hover {
 .lista-productos li:last-child {
     margin-bottom: 0;
 }
+ */
+ .lista-productos {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.lista-productos li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 5px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #dee2e6;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.lista-productos li:hover {
+    background-color: #e9ecef;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.lista-productos li span {
+    font-weight: bold;
+    color: #343a40;
+    margin-right: 10px;
+    flex: 1;
+}
+
+.lista-productos li:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.lista-productos img.mini__thumbnail {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    margin-right: 15px;
+}
+
+.lista-productos td {
+    padding: 10px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.lista-productos thead {
+    background-color: #343a40;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.lista-productos th {
+    padding: 10px;
+    text-align: left;
+}
+
+.lista-productos tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.lista-productos tr:hover {
+    background-color: #dee2e6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+/* FIN TABLA*/
+
+
 
 /* Upload */
 
@@ -322,6 +397,21 @@ nav a:hover {
     margin: 10px;
     color: #777;
 }
+
+.card.disabled {
+    background-color: #f8f9fa;
+    color: #aaa;
+    box-shadow: none;
+    pointer-events: none; /* Deshabilitar la interacción */
+    opacity: 0.6;
+}
+
+.card.disabled button {
+    background-color: #ddd;
+    color: #999;
+    border: none;
+}
+
 
 /*Button*/
 
@@ -1032,4 +1122,10 @@ body {
     padding: 2px;
     font-size: 12px; /* Ajusta el tamaño del ícono según sea necesario */
     color: black; /* Color del ícono */
+}
+
+
+.disabled-link {
+    display: none;
+   
 }

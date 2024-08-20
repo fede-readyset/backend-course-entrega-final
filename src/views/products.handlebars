@@ -1,9 +1,8 @@
 <h2>Listado de productos</h2>
 <div>
-{{!-- <a href="?viewMode=list">Lista</a>
-<a href="?viewMode=card">Cards</a><br> --}}
+
     {{#each products}}
-    <div class="card">
+    <div class="card" {{#unless this.status}} disabled {{/unless}}>
         <div class="thumbnail-container">
             <img class="thumbnail" src="{{this.thumbnail}}" alt="Imagen de {{this.title}}">
         </div>
@@ -13,12 +12,11 @@
 
         <p>{{this.description}}</p>
         <p>Stock: {{this.stock}} unidades</p>
-        <p>Código: {{this.code}}</p>
         <p>Status: {{#if this.status}} Activo {{else}} Inactivo {{/if}}</p>
         <p>Categoría: {{this.category}}</p>
 
         <p>Vendedor: {{#if (eq this.owner "admin")}} CoderMart {{else}} {{this.owner}} {{/if}} </p>
-        
+
         <h2 style="text-align:center">€ {{this.price}}</h2>
 
 
@@ -28,22 +26,29 @@
             {{!-- Mostrar botón "Agregar al carrito" si el owner no es "admin" y el owner no es el usuario actual --}}
             {{#unless (or (eq ../session.user.role "admin") (eq this.owner ../session.user.email))}}
             <form class="addtocart-form" method="POST" action="{{this._id}}">
-                <button type="submit" {{#unless this.status}} disabled {{/unless}} class="btn btn-primary"
+                <button type="submit" class="btn btn-primary" {{#unless this.status}} disabled {{/unless}}
                     title="Agregar producto al carrito">
-                    <i class="bi bi-cart-fill me-2"></i>
+                    <i class="fa fa-cart-plus"></i>
                 </button>
             </form>
             {{/unless}}
 
-
-            {{!-- Mostrar botón "Eliminar" si el owner es "admin" o si el owner es el usuario actual --}}
+            {{!-- Mostrar botón "Eliminar" y "Editar" si el owner es "admin" o si el owner es el usuario actual --}}
             {{#if (or (eq ../session.user.role "admin") (eq this.owner ../session.user.email))}}
             <form class="delete-form" method="DELETE" action="{{this._id}}">
                 <button type="submit" class="btn btn-danger" title="Eliminar producto de la tienda">
-                    <i class="bi bi-trash-fill me-2"></i>
+                    <i class="fa fa-trash"></i>
+                </button>
+
+            </form>
+            <form class="edit-form" method="PUT" action="/editproduct/{{this._id}}">
+                <button type="submit" class="btn" title="Editar producto">
+                    <i class="fa fa-edit"></i>
                 </button>
             </form>
             {{/if}}
+
+
 
         </div>
     </div>
@@ -94,6 +99,8 @@
         addToCartForms.forEach(function (form) {
             form.addEventListener('submit', function (event) {
                 event.preventDefault(); // Evitar que el formulario se envíe automáticamente
+
+
                 var formAction = "/api/carts/{{session.user.cart}}/product/" + this.getAttribute('action'); // Obtener la URL original del formulario
 
                 var formData = new FormData(this); // Obtener los datos del formulario
@@ -135,6 +142,9 @@
             });
         });
 
+
+
+
         var deleteProductForms = document.querySelectorAll('form.delete-form');
 
         deleteProductForms.forEach(function (form) {
@@ -153,45 +163,45 @@
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Sí, eliminar',
                     cancelButtonText: 'Cancelar'
-                }).then((result) =>{
+                }).then((result) => {
                     if (result.isConfirmed) {
                         // Enviar la solicitud a la API usando fetch
                         fetch(formAction, {
                             method: 'DELETE',
                         })
 
-                        .then(response => {
-                            // Verificar si la solicitud fue exitosa
-                            if (!response.ok) {
-                                return response.json().then(error => {
-                                    throw new Error(error.error);
+                            .then(response => {
+                                // Verificar si la solicitud fue exitosa
+                                if (!response.ok) {
+                                    return response.json().then(error => {
+                                        throw new Error(error.error);
+                                    });
+                                }
+
+                                // Si la solicitud fue exitosa, muestro una alerta con SweetAlert2
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Producto eliminado de la tienda',
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                }).then(() => window.location.reload());
+
+
+                            })
+                            .catch(error => {
+                                console.error('Error:', error.message);
+                                // Si la solicitud no fue exitosa, muestro un error con SweetAlert2
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error al elimnar el producto de la tienda',
+                                    text: error.message,
+                                    showConfirmButton: false,
+                                    timer: 2000
                                 });
-                            }
-
-                            // Si la solicitud fue exitosa, muestro una alerta con SweetAlert2
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Producto eliminado de la tienda',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(() => window.location.reload());                            
-                        
-
-                        })
-                        .catch(error => {
-                            console.error('Error:', error.message);
-                            // Si la solicitud no fue exitosa, muestro un error con SweetAlert2
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error al elimnar el producto de la tienda',
-                                text: error.message,
-                                showConfirmButton: false,
-                                timer: 2000
                             });
-                        });
                     }
                 })
-                
+
             });
         });
 

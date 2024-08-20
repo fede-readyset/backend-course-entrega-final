@@ -142,12 +142,8 @@ export class CartService {
         cart.products.forEach(producto => {
             if (producto.qty <= producto.product.stock) {
                 producto.unitPrice = producto.product.price;
-
                 availableProducts.push(producto);
-
                 ammount += producto.qty * producto.product.price;
-                
-
             } else {
                 unavailableProducts.push(producto);
             }

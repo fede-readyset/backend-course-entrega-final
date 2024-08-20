@@ -10,6 +10,9 @@ const cartService = new CartService();
 import UserService from "../services/user.service.js";
 const userService = new UserService();
 
+import ProductService from "../services/product.service.js";
+const productService = new ProductService();
+
 import moment from 'moment';
 
 
@@ -75,8 +78,9 @@ class ViewsController {
                 cid = req.session.user.cart;
             }
 
-            // Busco el carrito
-            const carrito = await cartRepository.findById(cid);
+            // Busco el carrito y convierto el resultado en un objeto para poder trabajar más cómodo
+            const resultado = await cartRepository.findById(cid);
+            let carrito = resultado.toObject();
 
             // Verificar si el carrito está vacío o no existe
             if (!carrito || carrito.products.length === 0) {
@@ -90,11 +94,11 @@ class ViewsController {
                 });
             }
 
-
             // Obtengo el subtotal de cada item
-            carrito.products.forEach(product => {
-                product.subtotal = Math.round(product.qty * product.product.price);
+            carrito.products.forEach(item => {
+                item.subtotal = (item.qty * item.product.price).toFixed(2);
             });
+            
 
             // Obtengo el total provisorio del carrito
             const provTotal = await cartService.calculateTotal(cid);
@@ -102,8 +106,8 @@ class ViewsController {
             // Envio la data para ser renderizada
             res.render("carts", {
                 cid: cid,
-                carrito: carrito.toObject(),
-                provTotal: provTotal,
+                carrito,
+                provTotal,
                 session: req.session
             });
 
@@ -118,12 +122,26 @@ class ViewsController {
     }
 
     // Vista de nuevo producto
-    async renderNewProductForm(req, res) {
+    async renderProductForm(req, res) {
         if (!req.session.login) return res.redirect("/login");
 
         let owner = req.session.user.role === "admin" ? "admin" : req.session.user.email;
+        let pid = req.params.pid;
 
-        res.render("newProduct", { session: req.session, owner });
+        try {
+            if(pid) {
+                let result = await productService.getProductById(req.params.pid);
+                let product = JSON.parse(JSON.stringify(result));
+                res.render("newProduct", { session: req.session, owner, product});
+            } else {
+                res.render("newProduct", { session: req.session, owner });
+            }
+            
+
+        } catch (error) {
+            res.status(500).send("Error al editar producto")
+        }
+        
     }
 
     // Vista de usuarios
@@ -236,7 +254,45 @@ class ViewsController {
         }
     }
 
+    async saveProduct (req,res) {
+        if(!req.session.login) return res.redirect("/login");
+    
+        try {
+            if (!req.body || !req.body.title || !req.body.price || !req.body.code || !req.body.stock) {
+                throw CustomError.createError({
+                    name: "Save product",
+                    cause: generateErrorInfo({}),
+                    mensaje: "Error al guardar el nuevo producto. Faltan Datos",
+                    codigo: EErrors.INVALID_TYPES_ERROR
+                })
+            }
+    
+            if (!req.params.pid){
+                const nuevoProducto = new ProductosModel();
+                nuevoProducto.title = req.body.title;
+                nuevoProducto.description = req.body.description;
+                nuevoProducto.price = req.body.price;
+                nuevoProducto.thumbnail = req.body.thumbnail;
+                nuevoProducto.code = req.body.code;
+                nuevoProducto.category = req.body.category;
+                nuevoProducto.stock= req.body.stock;
+                nuevoProducto.status = req.body.status === 'on';
+                nuevoProducto.thumbnail = "/img/"+ req.file.filename;
+                nuevoProducto.owner = req.body.owner;
+        
+                await nuevoProducto.save();
+            } else {
 
+                let producto = productService.updateProduct(req.params.pid, req.body )
+                
+            }
+    
+            res.status(200).redirect("/");
+        } catch (error) {
+    
+            res.status(500).send({message: `Error en el servidor: ${error}`}); 
+        }
+    }
 
 
     // Tercer intergradora:

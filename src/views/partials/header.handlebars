@@ -2,6 +2,7 @@
     <a class="navbar-brand" href="#">
         <img id="logotipo" src="/img/logotipo.jpeg" alt="Logotipo Codefour" style="height: 40px;">
     </a>
+
     {{#if session.login }}
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Menú principal a la izquierda -->
@@ -10,19 +11,19 @@
                     <a class="nav-link" href="/"><i class="fa fa-shopping-basket" aria-hidden="true"></i> Products </a> 
                 </li>
                 <li class="nav-item"> 
-                    <a class="nav-link" href="/realtimeproducts"><i class="fa fa-eye" aria-hidden="true"></i> Realtime </a> 
+                    <a class="nav-link {{#if (eq session.user.role "user")}} disabled-link{{/if}}" href="/realtimeproducts"><i class="fa fa-eye " aria-hidden="true" ></i> Realtime </a> 
                 </li>
                 <li class="nav-item"> 
-                    <a class="nav-link" href="/newproduct"> <i class="fa fa-plus-square" aria-hidden="true"></i> New Product </a> 
+                    <a class="nav-link {{#if (eq session.user.role "user")}} disabled-link{{/if}}" href="/newproduct"> <i class="fa fa-plus-square" aria-hidden="true"></i> New Product </a> 
                 </li>
                 <li class="nav-item"> 
-                    <a class="nav-link" href="/users"> <i class="fa fa-users"></i> Users </a> 
+                    <a class="nav-link {{#unless (eq session.user.role "admin")}} disabled-link{{/unless}}" href="/users"> <i class="fa fa-users"></i> Users </a> 
                 </li>
                 <li class="nav-item"> 
-                    <a class="nav-link" href="/chat"> <i class="fa fa-comments"></i> Chat</a> 
+                    <a class="nav-link {{#if (eq session.user.role "admin")}} disabled-link{{/if}}" href="/chat"> <i class="fa fa-comments"></i> Chat</a> 
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/carts">
+                    <a class="nav-link {{#if (eq session.user.role "admin")}} disabled-link{{/if}}" href="/carts">
                         <i class="fas fa-shopping-cart"></i> Cart
                         {{#if session.cartCount}}
                             ({{session.cartCount}})

@@ -47,50 +47,16 @@ router.use(bodyParser.urlencoded({ extended: true }));
 // RUTAS:
 router.get("/", viewsController.renderProducts);
 router.get("/carts/:cid?", checkUserRole(['user','premium']), viewsController.renderCart);
-router.get("/realtimeproducts", checkUserRole(['admin']), viewsController.renderRealTimeProducts);
+router.get("/realtimeproducts", checkUserRole(['admin','premium']), viewsController.renderRealTimeProducts);
 router.get("/login", viewsController.renderLogin);
 router.get("/register", viewsController.renderRegister);
-router.get("/newproduct", checkUserRole(['admin','premium']), viewsController.renderNewProductForm);
+router.get("/newproduct", checkUserRole(['admin','premium']), viewsController.renderProductForm);
+router.get("/editproduct/:pid?", checkUserRole(['admin','premium']), viewsController.renderProductForm);
 router.get("/accessdenied", viewsController.renderAccessDenied);
 router.get("/mockingproducts", viewsController.mockingProducts);
 router.get("/users", checkUserRole(['admin']),viewsController.renderUsers);
 router.get("/edituser/:uid",viewsController.editUser);
-
-
-// Ruta para cargar nuevos productos
-router.post("/newproduct", multer({storage}).single("image"), async (req,res) => {
-    if(!req.session.login) return res.redirect("/login");
-
-    try {
-        if (!req.body || !req.body.title || !req.body.price || !req.body.code || !req.body.stock) {
-            throw CustomError.createError({
-                name: "New product",
-                cause: generateErrorInfo({}),
-                mensaje: "Error al cargar el nuevo producto. Faltan Datos",
-                codigo: EErrors.INVALID_TYPES_ERROR
-            })
-        }
-
-
-        const nuevoProducto = new ProductosModel();
-        nuevoProducto.title = req.body.title;
-        nuevoProducto.description = req.body.description;
-        nuevoProducto.price = req.body.price;
-        nuevoProducto.thumbnail = req.body.thumbnail;
-        nuevoProducto.code = req.body.code;
-        nuevoProducto.category = req.body.category;
-        nuevoProducto.stock= req.body.stock;
-        nuevoProducto.status = req.body.status === 'on';
-        nuevoProducto.thumbnail = "/img/"+ req.file.filename;
-        nuevoProducto.owner = req.body.owner;
-
-        await nuevoProducto.save();
-        res.redirect("/");
-    } catch (error) {
-
-        res.status(500).send({message: `Error en el servidor: ${error}`}); 
-    }
-}) 
+router.post("/saveproduct/:pid", multer({storage}).single("image"), viewsController.saveProduct);
 
 
 // Ruta para testear el logger Desafio 9
