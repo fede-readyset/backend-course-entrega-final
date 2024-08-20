@@ -399,3 +399,6 @@
 {"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
 {"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
 {"level":"error","message":"Error interno. Fallo al actualizar los productos en el carrito"}
+{"level":"error","message":"Fallo al eliminar producto"}
+{"level":"error","message":"Fallo al eliminar producto"}
+{"level":"error","message":"Fallo al eliminar producto"}

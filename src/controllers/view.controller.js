@@ -121,13 +121,13 @@ class ViewsController {
     async renderNewProductForm(req, res) {
         if (!req.session.login) return res.redirect("/login");
 
-        let owner = req.session.user.role === "admin" ? "admin" : req.session.user.email; 
- 
-        res.render("newProduct", { session:req.session, owner });
+        let owner = req.session.user.role === "admin" ? "admin" : req.session.user.email;
+
+        res.render("newProduct", { session: req.session, owner });
     }
 
     // Vista de usuarios
-    async renderUsers(req,res) {
+    async renderUsers(req, res) {
         if (!req.session.login) return res.redirect("/login");
         let result = await userService.getAllUsers();
         let users = result.map(user => ({
@@ -144,23 +144,23 @@ class ViewsController {
 
         }))
 
-        res.render("users", {session: req.session, users});
+        res.render("users", { session: req.session, users });
     }
 
 
     // Vista de usuarios
-    async editUser(req,res) {
+    async editUser(req, res) {
         if (!req.session.login) return res.redirect("/login");
 
         const uid = req.params.uid;
-        
+
         try {
             let user = await userService.getUserById(uid); // Asume que tienes un servicio que puede obtener un usuario por ID
             if (!user) {
                 res.status(404).send("Usuario no encontrado");
                 return;
             }
-    
+
             // Preparar la información del usuario para la vista
             let userData = {
                 first_name: user.first_name,
@@ -175,8 +175,8 @@ class ViewsController {
                 role: user.role,
                 last_connection: user.last_connection ? moment(user.last_connection).format('YYYY-MM-DD HH:mm') : 'N/A'
             };
-    
-            res.render("editUser", {session: req.session, user: userData});
+
+            res.render("editUser", { session: req.session, user: userData });
         } catch (error) {
             console.error('Error al obtener el usuario:', error);
             res.status(500).send("Error interno del servidor");
@@ -193,13 +193,13 @@ class ViewsController {
 
     // Vista del registro
     async renderRegister(req, res) {
-        res.render("register");
+        res.render("register", { session: req.session });
     }
 
     // Vista de Realtime Products
     async renderRealTimeProducts(req, res) {
         if (!req.session.login) return res.redirect("/login");
-        res.render("realTimeProducts", { session:req.session  });
+        res.render("realTimeProducts", { session: req.session });
     }
 
     //  Vista del chat
@@ -209,7 +209,7 @@ class ViewsController {
 
     async renderAccessDenied(req, res) {
 
-        res.render("accessDenied",{session: req.session});
+        res.render("accessDenied", { session: req.session });
     }
 
 

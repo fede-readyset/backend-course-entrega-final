@@ -1,4 +1,6 @@
 import ProductService from "../services/product.service.js";
+import EmailManager from "../services/email.service.js";
+const emailManager = new EmailManager;
 
 class ProductController {
     constructor() {
@@ -83,7 +85,7 @@ class ProductController {
                 req.logger.error("Socket.IO no está definido en req")
             }
         } catch (error) {
-            if (error.name ==='ValidationError') {
+            if (error.name === 'ValidationError') {
                 res.status(400).json({
                     success: false,
                     message: "Error de validación: " + error.message
@@ -139,12 +141,26 @@ class ProductController {
         try {
             const deletedProduct = await this.productService.deleteProduct(req.params.pid);
             if (deletedProduct) {
+
+                // Debo notificar al owner (si es un usuario premium)
+                if (deletedProduct.owner && deletedProduct.owner !== 'admin') {
+                    emailManager.sendNotificationToUser(deletedProduct.owner,`
+                        Queríamos informarte que el siguiente producto fue eliminado de la tienda:<br>
+                        Titulo:  ${deletedProduct.title} <br>
+                        Descripción: ${deletedProduct.description} <br>
+                        Código: ${deletedProduct.code} <br>
+                        Precio: ${deletedProduct.price} <br>
+                    `);
+                }
+
+
+                // Devuelvo el resultado de la operación
                 res.status(200).json({
                     success: true,
                     message: "Producto eliminado con éxito",
                     id: req.params.pid
                 });
-                //req.io.emit("UpdateNeeded", true);
+                req.io.emit("UpdateNeeded", true);
             } else {
                 res.status(404).json({
                     success: false,

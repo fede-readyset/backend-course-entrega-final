@@ -100,6 +100,25 @@ class EmailManager {
             console.log("Error al enviar el mail de recuperación de password");
         }
     }
+
+    async sendNotificationToUser (email, message) {
+        try {
+
+            const mailOptions = {
+                from: "CoderMart <torres.federico@gmail.com>",
+                to: email,
+                subject: "Notificación de CoderMart",
+                html:`
+                    <h1>Notificación de CoderMart: </h1>
+                    <p>${message}</p>
+                `
+            }
+
+            await this.transporter.sendMail(mailOptions);
+        } catch (error) {
+            console.log("Error al enviar el mail de notificación");
+        }
+    }
 }
 
 export default EmailManager;

@@ -25,7 +25,7 @@ router.delete('/:uid', checkUserRole(['admin']), userController.deleteUser);
 
 
 
-// VERSION PARA passport-local
+// VERSION PARA register en passport-local
 router.post("/", passport.authenticate("register", {
     failureRedirect: "/failedregister"
 }), async (req, res) => {
@@ -44,11 +44,46 @@ router.post("/", passport.authenticate("register", {
         avatar_url: req.user.avatar_url
     }
     req.session.login = true;
-    // res.send("<p>Usuario creado con éxito. Redireccionando...</p><meta http-equiv='refresh' content='2;url=/api/users/profile'>");
+
     res.status(200).json({success:true,message:"Usuario creado con éxito.",payload:req.session.user});
 })
 
+router.post("/register", async (req, res) => {
+    try {
+        const { first_name, last_name, email, password, age, role, cart, avatar_url } = req.body;
 
+        // Verificar si el usuario ya existe
+        const existingUser = await User.findOne({ email: email });
+        if (existingUser) {
+            return res.status(400).json({ success: false, message: "El usuario ya existe." });
+        }
+
+        // Hashear la contraseña
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Crear un nuevo usuario
+        const newUser = new User({
+            first_name,
+            last_name,
+            email,
+            password: hashedPassword,
+            age,
+            role,
+            cart,
+            avatar_url
+        });
+
+        // Guardar el usuario en la base de datos
+        await newUser.save();
+
+        // Responder con éxito sin iniciar sesión
+        res.status(201).json({ success: true, message: "Usuario creado con éxito.", payload: newUser });
+
+    } catch (error) {
+        console.error("Error al registrar el usuario:", error);
+        res.status(500).json({ success: false, message: "Error interno del servidor." });
+    }
+});
 
 
 export default router;
