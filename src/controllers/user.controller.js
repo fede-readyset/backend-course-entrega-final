@@ -16,43 +16,55 @@ const userService = new UserService();
 
 class UserController {
     async profile(req, res) {
+        console.log(req.session);
         if (!req.session.login) {
-            return res.redirect("login");
+            return res.redirect("/login");
         } else {
             return res.render("profile", { session: req.session });
         }
     }
+    async registerUser(req, res) {
+        try {
+            const { first_name, last_name, email, password, age, role, cart, avatar_url } = req.body;
+            //const isAdmin = req.body.isAdmin || false;
 
-    async register(req, res) {
-        passport.authenticate("register", { failureRedirect: "/failedregister" }, async (err, user, info) => {
-            if (err) {
-                return res.status(500).send(err.message);
-            }
-            if (!user) {
-                return res.status(400).send("Credenciales inválidas");
-            }
-            req.logIn(user, function (err) {
-                if (err) {
-                    return res.status(500).send(err.message);
+            // Solo verificar si el usuario ya existe si es un registro de admin
+            //if (isAdmin) {
+                const existingUser = await UsuarioModel.findOne({ email });
+                if (existingUser) {
+                    return res.status(400).json({ success: false, message: "El usuario ya existe." });
                 }
-                req.session.user = {
-                    first_name: user.first_name,
-                    last_name: user.last_name,
-                    email: user.email,
-                    age: user.age,
-                    role: user.role,
-                    cart: user.cart,
-                    avatar_url: user.avatar_url,
-                    _id: user._id
-                };
-                req.session.login = true;
-                res.status(200).json({ success: true, message: "Usuario generado con éxito", payload: req.session.user });
-                //res.send("<p>Usuario creado con éxito. Redireccionando...</p>         <meta http-equiv='refresh' content='2;url=/profile'>");
 
-            })
-        });
+                // Hashear la contraseña
+                const hashedPassword = await createHash(password);
+
+                // Crear un nuevo usuario
+                const newUser = new UsuarioModel({
+                    first_name,
+                    last_name,
+                    email,
+                    password: hashedPassword,
+                    age,
+                    role,
+                    cart,
+                    avatar_url
+                });
+
+                // Guardar el usuario en la base de datos
+                await newUser.save();
+
+                // Responder con éxito sin iniciar sesión (para admin)
+                return res.status(201).json({ success: true, message: "Usuario creado con éxito.", payload: newUser });
+            //}
+
+            // Si no es admin, se asume que passport ya manejó la creación del usuario
+            return res.status(201).json({ success: true, message: "Usuario registrado y logueado con éxito.", payload: req.session.user });
+
+        } catch (error) {
+            console.error("Error al registrar el usuario:", error);
+            res.status(500).json({ success: false, message: "Error interno del servidor." });
+        }
     }
-
 
 
     failedRegister(req, res) {
@@ -96,10 +108,6 @@ class UserController {
                 } catch (error) {
                     return res.status(500).json({ success: false, message: "Error actualizando la última conexión" });
                 }
-
-
-
-
 
                 return res.status(200).json({
                     success: true,

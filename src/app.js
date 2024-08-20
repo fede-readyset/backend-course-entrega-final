@@ -70,7 +70,8 @@ app.use(session({
     store: MongoStore.create({
         mongoUrl: configObject.mongo_url,
         ttl: 3600
-    })
+    }),
+    cookie: {secure:false}
 }))
 initializePassport();
 app.use(passport.initialize());

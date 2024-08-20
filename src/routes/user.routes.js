@@ -22,13 +22,57 @@ router.put("/premium/:uid", userController.changePremiumRole);router.delete('/de
 router.delete('/delete-inactive',  userController.deleteInactive);
 router.delete('/:uid', checkUserRole(['admin']), userController.deleteUser);
 
+// Registro de usuario normal (con inicio de sesión automático)
+router.post("/register", passport.authenticate("register", {
+    failureRedirect: "/failedregister"
+}), (req, res) => {
+
+    if (!req.user) {
+        return res.status(400).send("Credenciales inválidas")
+    }
+
+    req.session.user = {
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        email: req.user.email,
+        age: req.user.age,
+        role: req.user.role,
+        cart: req.user.cart,
+        avatar_url: req.user.avatar_url
+    }
+    req.session.login = true;
+
+    
+    // Si la autenticación es exitosa, simplemente responde con un JSON
+    return res.status(201).json({ success: true, message: "Usuario registrado y logueado con éxito.", payload: req.user });
+});
+
+// Registro de usuario por admin (sin inicio de sesión automático)
+router.post("/admin/register", checkUserRole(['admin']), (req, res) => {
+    req.body.isAdmin = true; // Este registro es realizado por un admin
+    userController.registerUser(req, res);
+});
 
 
 
-// VERSION PARA register en passport-local
+
+/* 
+
+// Registro de usuario con passport local (loguea al usuario automáticamente)
 router.post("/", passport.authenticate("register", {
     failureRedirect: "/failedregister"
-}), async (req, res) => {
+}), userController.registerUser);
+
+// Registro de usuario sin iniciar sesión (usado por el admin)
+router.post("/admin/register", (req,res,next) => {
+    req.body.isAdmin = true;
+    next();
+}, userController.registerUser);
+ */
+
+
+/* 
+async (req, res) => {
 
     if (!req.user) {
         return res.status(400).send("Credenciales inválidas")
@@ -83,7 +127,7 @@ router.post("/register", async (req, res) => {
         console.error("Error al registrar el usuario:", error);
         res.status(500).json({ success: false, message: "Error interno del servidor." });
     }
-});
+}); */
 
 
 export default router;

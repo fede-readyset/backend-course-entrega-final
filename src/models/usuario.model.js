@@ -33,7 +33,10 @@ const usuariosSchema = new mongoose.Schema({
         default: "user",
         required: false
     },
-    avatar_url: String,
+    avatar_url: {
+        type:String,
+        default: "/img/generic_avatar.jpeg"
+    },
     resetToken: {
         token: String,
         expire: Date
