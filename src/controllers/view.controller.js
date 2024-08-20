@@ -209,7 +209,7 @@ class ViewsController {
 
     async renderAccessDenied(req, res) {
 
-        res.render("accessDenied", { session: req.session });
+        res.render("accessdenied", { session: req.session });
     }
 
 

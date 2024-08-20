@@ -1,7 +1,7 @@
 const checkUserRole = (allowedRoles) => (req,res,next) => {
     if (!req.session || !req.session.user) {
         req.session.error="Acceso denegado. Sesión no activa"
-        return res.redirect('/aaaalogin');
+        return res.redirect('/login');
     }
     
     const userRole = req.session.user.role;
