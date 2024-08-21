@@ -2,9 +2,10 @@
 <div>
 
     {{#each products}}
+    
     <div class="card" {{#unless this.status}} disabled {{/unless}}>
         <div class="thumbnail-container">
-            <img class="thumbnail" src="{{this.thumbnail}}" alt="Imagen de {{this.title}}">
+            <img class="thumbnail" src="{{#if this.thumbnail}}{{this.thumbnail}}{{else}}/img/generic_product.png{{/if}}" alt="Imagen de {{this.title}}" onerror="this.onerror=null;this.src='/img/generic_product.png';">
         </div>
         <p>
         <h3> {{this.title}}</h3>

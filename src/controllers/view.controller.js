@@ -310,7 +310,7 @@ class ViewsController {
                 const nuevoProducto = new ProductosModel();
                 nuevoProducto.title = req.body.title;
                 nuevoProducto.description = req.body.description;
-                nuevoProducto.price = req.body.price;
+                nuevoProducto.price = parseFloat(req.body.price.replace(",","."));
                 nuevoProducto.thumbnail = req.body.thumbnail;
                 nuevoProducto.code = req.body.code;
                 nuevoProducto.category = req.body.category;
