@@ -361,7 +361,7 @@ class UserController {
     async deleteInactive(req, res) {
         try {
             const dateThreshold = new Date();
-            dateThreshold.setDate(dateThreshold.getDate() - 30);
+            dateThreshold.setDate(dateThreshold.getDate() - 2);
 
             // Encuentro los usuarios inactivos y guardo los IDs de sus carritos
             const inactiveUsers = await UsuarioModel.find({ last_connection: { $lt: dateThreshold } }, 'cart email');
