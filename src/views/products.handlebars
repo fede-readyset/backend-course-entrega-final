@@ -104,11 +104,11 @@
 
                 var formAction = "/api/carts/{{session.user.cart}}/product/" + this.getAttribute('action'); // Obtener la URL original del formulario
 
-                var formData = new FormData(this); // Obtener los datos del formulario
-                // Enviar la solicitud a la API usando fetch
+                //var formData = new FormData(this); // Obtener los datos del formulario
+
+                // Enviar la solicitud a la API usando fetch  ...body: formData
                 fetch(formAction, {
-                    method: 'POST',
-                    body: formData
+                    method: 'POST'
                 })
                     .then(response => {
                         // Verificar si la solicitud fue exitosa

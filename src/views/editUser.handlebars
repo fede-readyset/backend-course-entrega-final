@@ -90,7 +90,6 @@ function resetPassword(email) {
         body: JSON.stringify({ email: email })
     })
     .then(response => {
-        console.log(response)
         if (response.ok) {
             Swal.fire({
                 title: '¡Éxito!',

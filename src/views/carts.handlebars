@@ -194,14 +194,12 @@
 
         // Botón para vaciar el carrito
         clearButton.addEventListener('click', function () {
-            console.log("Limpiar carrito y volver al home");
             Swal.fire({
                 title: "¿Estas seguro de querer vaciar el carrito?",
                 confirmButtonText: "Vaciar",
                 showCancelButton: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    console.log("confirmed");
                     var cleanupUrl = `/api/carts/{{session.user.cart}}`;
                     fetch(cleanupUrl, {
                         method: 'DELETE'

@@ -16,7 +16,6 @@ const userService = new UserService();
 
 class UserController {
     async profile(req, res) {
-        console.log(req.session);
         if (!req.session.login) {
             return res.redirect("/login");
         } else {
@@ -419,12 +418,9 @@ class UserController {
     async editUser(req, res) {
         try {
             const { uid } = req.params;
-            console.log(uid);
             const updatedUser = await userService.updateUserById(uid,req.body);
 
             res.status(200).json({"success":true, "message": "Usuario modificado con exito", "payload": updatedUser});
-
-            
         } catch (error) {
             res.status(500).json({ success: false, message: 'Error al modificar usuario', error: error.message })
 
