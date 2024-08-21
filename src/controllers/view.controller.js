@@ -1,5 +1,6 @@
 import ProductosModel from "../models/productos.model.js";
 import CarritosModel from "../models/carritos.model.js";
+import TicketsModel from "../models/tickets.model.js";
 
 import CartRepository from "../repositories/cart.repository.js";
 const cartRepository = new CartRepository();
@@ -166,7 +167,7 @@ class ViewsController {
     }
 
 
-    // Vista de usuarios
+    // Vista de edición de usuarios
     async editUser(req, res) {
         if (!req.session.login) return res.redirect("/login");
 
@@ -202,6 +203,44 @@ class ViewsController {
 
     }
 
+
+    // Vista de ventas
+    async renderSales(req, res) {
+        if (!req.session.login) return res.redirect("/login");
+
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10; 
+
+        try {
+            const options = {
+                page: page,
+                limit: limit,
+                lean: true,
+                sort: { purchase_datetime: -1 } 
+            };
+
+
+            const result = await TicketsModel.paginate({}, options);
+
+            for (let ticket of result.docs) {
+                ticket.purchase_datetime = moment(ticket.purchase_datetime).format('YYYY-MM-DD HH:mm');
+                ticket.ammount = ticket.ammount.toFixed(2);
+                let customer = await userService.getUserByEmail(ticket.purchaser);
+                ticket.customerName = customer ? (customer.first_name + " " + customer.last_name) : "Usuario inexistente";
+            }
+            res.render("sales", {
+                session: req.session,
+                tickets: result.docs,
+                totalPages: result.totalPages,
+                currentPage: page,
+                limit
+            });
+    
+
+        } catch (error) {
+            res.status(500).json({ message: 'Error interno del servidor' });
+        }  
+    }
 
 
     // Vista del login

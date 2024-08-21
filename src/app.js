@@ -8,6 +8,8 @@ import session from "express-session";
 import configObject from "./config/config.js";
 import SocketService from "./services/socket.service.js";
 
+// Importo los helpers de Handlebars
+import './utils/handlebars-helpers.js';
 
 // Importo conexión con database
 import "./database.js";
@@ -80,11 +82,7 @@ app.use(errorHandler);
 app.use(addLogger);
 
 
-// Algunos Helpers de HandleBars:
 
-Handlebars.registerHelper('eq', function (a, b) { return a === b; });
-Handlebars.registerHelper('or', function (a, b) { return a || b; });
-Handlebars.registerHelper('and', function (a, b) { return a && b; });
 
 
 // Configuro express-handlebars

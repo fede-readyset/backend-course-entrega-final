@@ -14,7 +14,10 @@
                     <a class="nav-link {{#if (eq session.user.role "user")}} disabled-link{{/if}}" href="/realtimeproducts"><i class="fa fa-eye " aria-hidden="true" ></i> Realtime </a> 
                 </li>
                 <li class="nav-item"> 
-                    <a class="nav-link {{#if (eq session.user.role "user")}} disabled-link{{/if}}" href="/newproduct"> <i class="fa fa-plus-square" aria-hidden="true"></i> New Product </a> 
+                    <a class="nav-link {{#if (eq session.user.role "user")}} disabled-link{{/if}}" href="/newproduct"> <i class="fa fa-plus-square" aria-hidden="true"></i> Add Product </a> 
+                </li>
+                <li class="nav-item"> 
+                    <a class="nav-link {{#unless (eq session.user.role "admin")}} disabled-link{{/unless}}" href="/sales"> <i class="fa fa-pie-chart" aria-hidden="true"></i> Sales </a> 
                 </li>
                 <li class="nav-item"> 
                     <a class="nav-link {{#unless (eq session.user.role "admin")}} disabled-link{{/unless}}" href="/users"> <i class="fa fa-users"></i> Users </a> 

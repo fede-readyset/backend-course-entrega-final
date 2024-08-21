@@ -56,6 +56,8 @@ router.get("/accessdenied", viewsController.renderAccessDenied);
 router.get("/mockingproducts", viewsController.mockingProducts);
 router.get("/users", checkUserRole(['admin']),viewsController.renderUsers);
 router.get("/edituser/:uid",viewsController.editUser);
+router.get("/sales", checkUserRole(['admin']),viewsController.renderSales);
+
 router.post("/saveproduct/:pid", multer({storage}).single("image"), viewsController.saveProduct);
 
 

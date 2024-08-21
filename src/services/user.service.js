@@ -21,7 +21,17 @@ class UserService {
             const result = await this.userRepository.findById(uid);
             return result;
         } catch (error) {
-            throw new Error('Error al obtener los usuarios');
+            throw new Error('Error al obtener el usuario por id');
+        }
+    }
+
+    // Obtener un usario por su Email
+    async getUserByEmail(email) {
+        try {
+            const result = await this.userRepository.findByEmail(email);
+            return result;
+        } catch (error) {
+            throw new Error('Error al obtener el usuario por email');
         }
     }
 

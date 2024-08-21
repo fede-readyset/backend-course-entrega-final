@@ -1129,3 +1129,28 @@ body {
     display: none;
    
 }
+
+.pagination {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 16px;
+}
+
+.page-link {
+    margin: 0 5px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.page-link:hover {
+    background-color: #0056b3;
+}
+
+.current-page {
+    margin: 0 10px;
+    font-weight: bold;
+}

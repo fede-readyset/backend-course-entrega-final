@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 const ticketsSchema = new mongoose.Schema({
     code: {
@@ -21,6 +22,7 @@ const ticketsSchema = new mongoose.Schema({
         unitPrice: Number
     }]
 })
+ticketsSchema.plugin(mongoosePaginate);
 
 const TicketsModel = mongoose.model("ticket", ticketsSchema);
 
