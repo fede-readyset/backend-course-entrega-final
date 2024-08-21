@@ -181,7 +181,6 @@ function deleteInactiveUsers() {
 }
 
 function resetPassword(email) {
-    console.log(email);
     fetch('/api/users/requestPasswordReset', {
         method: 'POST',
         headers: {

@@ -746,7 +746,9 @@ body {
 
 .upload__field input[type="text"],
 .upload__field textarea,
-.upload__field input[type="file"] {
+.upload__field input[type="file"],
+.upload__field input[type="email"]
+ {
     width: calc(100% - 20px); /* Ajuste para compensar el padding */
     padding: 10px;
     font-size: 1rem;
@@ -963,6 +965,7 @@ body {
     border-radius: 5px;
     cursor: pointer;
     margin: 10px;
+    text-decoration: none; 
 }
 
 .btn-danger:hover {
@@ -1153,4 +1156,23 @@ body {
 .current-page {
     margin: 0 10px;
     font-weight: bold;
+}
+
+.upload__field {
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.upload__field label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.upload__field input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
 }
