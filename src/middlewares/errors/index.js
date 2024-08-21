@@ -10,9 +10,10 @@ const logger = winston.createLogger({
     ]
 })
 
+export {logger};
+
 export default (error, req, res, next) => {
     logger.error(error);
-    //console.log(error.cause);
 
     let statusCode;
     let errorMessage;

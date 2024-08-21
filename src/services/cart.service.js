@@ -2,6 +2,7 @@ import CartRepository from "../repositories/cart.repository.js";
 import ProductRepository from "../repositories/product.repository.js";
 import TicketsModel from "../models/tickets.model.js";
 import CarritosModel from "../models/carritos.model.js";
+import { logger } from '../middlewares/errors/index.js';
 import EmailManager from "./email.service.js";
 const emailManager = new EmailManager();
 
@@ -180,8 +181,13 @@ export class CartService {
                     await this.productRepository.updateById(producto.product._id,  producto.product );
                 })
 
-                // Envío el email de confirmación de la compra
-                await emailManager.sendPurchaseEmail(emailData);
+                // Intento enviar el email de confirmación de la compra
+                try {
+                    await emailManager.sendPurchaseEmail(emailData);
+                } catch (error) {
+                    logger.error("Error al enviar el email de confirmación de compra: ",error)
+                }
+
 
                 return { result };
             } else {

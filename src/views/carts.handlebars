@@ -52,8 +52,8 @@
 
         </div>
         <div class="actions">
-            <button class="btn return-btn">Seguir comprando</button>
-            <button class="btn confirm-btn">Checkout</button>
+             <button class="btn return-btn"><i class="fa fa-shopping-basket" aria-hidden="true"></i> <br> Seguir comprando</button>
+            <button class="btn confirm-btn"><i class="fa fa-credit-card" aria-hidden="true"></i> <br>Confirmar compra</button>
 
         </div>
     </div>
@@ -96,8 +96,6 @@
 
                     let updateUrl = `/api/carts/{{session.user.cart}}`;
 
-                    console.log(updateArray);
-
                     fetch(updateUrl, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
@@ -123,11 +121,7 @@
                 });
 
                 removeBtn.addEventListener('click', function () {
-                    console.log(`Eliminar el producto ${pid} del carrito`);
-                    // Implementación del código para eliminar el producto del carrito
-
                     let deleteURL = `/api/carts/{{session.user.cart}}/product/${pid}`;
-                    console.log(deleteURL);
                     fetch(deleteURL, { method: 'DELETE'})
                         .then(response => {
                             if (!response.ok) {
@@ -159,11 +153,20 @@
         // Botón Checkout
         confirmButton.addEventListener('click', function () {
             var confirmPurchaseUrl = `/api/carts/{{session.user.cart}}/purchase`;
+            const icon = confirmButton.querySelector('i');
+        
+            // Cambia el ícono a un círculo giratorio
+            icon.classList.remove('fa-credit-card');
+            icon.classList.add('fa-spinner', 'fa-spin');
+
             fetch(confirmPurchaseUrl, {
                 method: 'GET'
             })
                 .then(response => {
                     if (!response.ok) {
+                        icon.classList.remove('fa-spinner', 'fa-spin');
+                        icon.classList.add('fa-credit-card');
+
                         return Swal.fire({
                             icon: 'error',
                             title: 'Error al generar ticket de compra',
