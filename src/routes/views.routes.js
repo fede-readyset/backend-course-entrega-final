@@ -58,7 +58,7 @@ router.get("/users", checkUserRole(['admin']),viewsController.renderUsers);
 router.get("/edituser/:uid",viewsController.editUser);
 router.get("/sales", checkUserRole(['admin']),viewsController.renderSales);
 
-router.post("/saveproduct/:pid", multer({storage}).single("image"), viewsController.saveProduct);
+router.post("/saveproduct/:pid?", multer({storage}).single("image"), viewsController.saveProduct);
 
 
 // Ruta para testear el logger Desafio 9

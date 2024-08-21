@@ -161,9 +161,7 @@ class UserController {
 
     async requestPasswordReset(req, res) {
         const { email } = req.body;
-        console.log(email);
 
-        console.log("HOLA");
         try {
             // Busco al usuario por email
             const user = await UsuarioModel.findOne({ email });
@@ -366,8 +364,10 @@ class UserController {
             dateThreshold.setDate(dateThreshold.getDate() - 30);
 
             // Encuentro los usuarios inactivos y guardo los IDs de sus carritos
-            const inactiveUsers = await UsuarioModel.find({ last_connection: { $lt: dateThreshold } }, 'cart');
+            const inactiveUsers = await UsuarioModel.find({ last_connection: { $lt: dateThreshold } }, 'cart email');
             const cartIds = inactiveUsers.map(user => user.cart).filter(cart => cart != null);
+            const emails = inactiveUsers.map(user => user.email);
+
 
             // Elimino los carritos asociados
             if (cartIds.length > 0) {
@@ -376,11 +376,20 @@ class UserController {
                 });
             }
 
+            // Mando el email avisandole a cada user
+            for (const email of emails) {
+                await emailManager.sendNotificationToUser(email, `
+                Tu usuario de CoderMart ${email}, fue eliminado por inactividad. <br>
+                No te preocupes, puedes volver a registrarte cuando quieras!
+                Te esperamos!  
+                `);
+            };
+            
 
             const result = await UsuarioModel.deleteMany({
                 last_connection: { $lt: dateThreshold }
             });
-
+            
             if (result.deletedCount > 0) {
                 res.status(200).json({ success: true, message: `Se eliminaron ${result.deletedCount} usuarios inactivos.` });
             } else {
