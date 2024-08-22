@@ -20,8 +20,6 @@ socket.on("Productos", (data) => {
                     <th>Stock</th>
                     <th>Categoría</th>
                     <th>Vendedor</th>
-
-                    
                 </tr>
             </thead>
             <tbody>`;
@@ -29,7 +27,8 @@ socket.on("Productos", (data) => {
     data.forEach(producto => {
         tablaProductos += `
             <tr>
-                <td><img class="mini__thumbnail" src="${producto.thumbnail}"></td>
+                <td><img class="mini__thumbnail" src="${producto.thumbnail?producto.thumbnail:'/img/generic_product.png'}"></td>
+                
                 <td>${producto.title}</td>
                 <td>${producto.description}</td>
                 <td>$${producto.price}</td>

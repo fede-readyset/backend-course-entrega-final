@@ -1,0 +1,113 @@
+<div class="upload">
+    <form id="productForm" enctype="multipart/form-data" class="upload__container">
+
+        <h2>{{#if product}}Editar{{else}}Nuevo{{/if}} producto</h2>
+      
+        <div class="upload__field">
+            <label for="title">Título:</label>
+            <input type="text" id="title" name="title" placeholder="Título" value="{{product.title}}" required>
+        </div>
+        <div class="upload__field">
+            <label for="description">Descripción:</label>
+            <textarea id="description" name="description" placeholder="Descripción" rows="4" required>{{product.description}}</textarea>
+        </div>
+        <div class="upload__field">
+            <label for="price">Precio:</label>
+            <input type="text" id="price" name="price" placeholder="Precio" value="{{product.price}}" required>
+        </div>
+        <div class="upload__field">
+            <label for="code">Código:</label>
+            <input type="text" id="code" name="code" placeholder="Código" value="{{product.code}}">
+        </div>
+        <div class="upload__field">
+            <label for="category">Categoría:</label>
+            <input type="text" id="category" name="category" placeholder="Categoría" value="{{product.category}}" required>
+        </div>
+        <div class="upload__field">
+            <label for="stock">Stock:</label>
+            <input type="text" id="stock" name="stock" placeholder="Stock" value="{{product.stock}}" required>
+        </div>
+        <div class="upload__field">
+            <label for="image">Thumbnail:</label>
+              
+            {{#if product.thumbnail}}
+            <div class="upload__field">
+                <img src="{{product.thumbnail}}" alt="Thumbnail del producto" style="max-width: 50px; height: auto;">
+            </div>
+            {{/if}}
+            
+            <input type="file" id="image" name="image">
+        </div>
+        <div class="upload__field">
+            <label for="status">Activo?</label>
+            <input type="checkbox" id="status" name="status" {{#if product.status}}checked{{/if}}>
+        </div>
+
+        <input type="hidden" id="productId" name="productId" value="{{product._id}}">
+        <input type="hidden" id="owner" name="owner" value="{{owner}}">
+
+        <div class="upload__field">
+            <button type="submit">Guardar</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('productForm').addEventListener('submit', async function(event) {
+        event.preventDefault();  // Evita el envío del formulario por defecto
+
+        const form = event.target;
+        const formData = new FormData(form);
+        
+        // Convertir el valor del checkbox 'status' a booleano 
+        const status = form.querySelector('#status').checked;
+        formData.set('status', status);
+
+        //Obtengo el productId
+        const productId = formData.get('productId');
+
+        let method = 'POST';
+        let url = '/api/products';
+        
+        // Si productId existe, cambio el método y la url ya que se trata de edicion y no de un producto nuevo
+        if (productId) {
+            method = 'PUT';
+            url = `/api/products/${productId}`;
+        }
+
+        try {
+            const response = await fetch(url, {
+                method: method,
+                body: formData
+            });
+            if (response.ok) {
+                Swal.fire({
+                    title: 'Éxito',
+                    text: 'Producto guardado con éxito',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = '/'; // Redirigir a otra página si se desea
+                });
+            } else {
+                // Manejar errores
+                const errorData = await response.json();
+                console.error('Error al guardar el producto:', errorData);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Hubo un problema al guardar el producto',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        } catch (error) {
+            console.error('Error de red:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema de red',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+</script>

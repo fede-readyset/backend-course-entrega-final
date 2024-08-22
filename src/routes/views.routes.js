@@ -7,7 +7,7 @@ const viewsController = new ViewsController();
 import ProductosModel from "../models/productos.model.js";
 import CarritosModel from "../models/carritos.model.js";
 import bodyParser from "body-parser";
-import multer from "multer";
+//import multer from "multer";
 import CustomError from "../services/errors/CustomError.js";
 import generateErrorInfo from "../services/errors/info.js";
 import EErrors from "../services/errors/info.js";
@@ -19,23 +19,6 @@ const router = express.Router();
 router.use(cartCountMiddleware);
 
 
-// Función para generar el nuevo nombre del archivo
-// Tomo la extensión original, pero cambio el nombre utilizando el código del producto para identificar el archivo
-function generateFileName(req, file, callback) {
-    const articleCode = req.body.code; 
-    const originalFileName = file.originalname;
-    const extension = originalFileName.split('.').pop();
-    const newFileName = `${articleCode}.${extension}`;
-    callback(null, newFileName);
-}
-
-// Configuro multer para subir los thumbnails
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "./src/public/img");        //Carpeta donde se guardan las imagenes
-    },
-    filename: generateFileName // Usar la función generateFileName para definir el nombre del archivo
-})
 
 // Middlewares
 router.use(express.json());
@@ -58,8 +41,10 @@ router.get("/users", checkUserRole(['admin']),viewsController.renderUsers);
 router.get("/edituser/:uid",viewsController.editUser);
 router.get("/sales", checkUserRole(['admin']),viewsController.renderSales);
 
-router.post("/saveproduct/:pid?", multer({storage}).single("image"), viewsController.saveProduct);
-
+// Tercer integradora:
+router.get("/reset-password", viewsController.renderResetPassword);
+router.get("/password", viewsController.renderCambioPassword);
+router.get("/confirmacion-envio", viewsController.renderConfirmacion);
 
 // Ruta para testear el logger Desafio 9
 router.get("/loggertest", (req, res) => {
@@ -68,15 +53,7 @@ router.get("/loggertest", (req, res) => {
     req.logger.warning("Mensaje WARN");
     req.logger.error("Mensaje ERROR");
     res.send("Logs Generados")
-
 })
-
-
-// Tercer integradora:
-router.get("/reset-password", viewsController.renderResetPassword);
-router.get("/password", viewsController.renderCambioPassword);
-router.get("/confirmacion-envio", viewsController.renderConfirmacion);
-
 
 // Exporto
 export default router;

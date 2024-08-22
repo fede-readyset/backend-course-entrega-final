@@ -2,6 +2,9 @@ import ProductService from "../services/product.service.js";
 import EmailManager from "../services/email.service.js";
 const emailManager = new EmailManager;
 
+
+
+
 class ProductController {
     constructor() {
         this.productService = new ProductService();
@@ -72,7 +75,17 @@ class ProductController {
 
     async addProduct(req, res) {
         try {
-            const newProduct = await this.productService.addProduct(req.body);
+            const nuevoProducto = {
+                ...req.body,
+                price: parseFloat(req.body.price.replace(",", "."))
+            };
+
+            // Solo actualizar el thumbnail si se subió un archivo
+            if (req.file) {
+                productToUpdate.thumbnail = `/img/${req.file.filename}`;
+            }
+
+            const newProduct = await this.productService.addProduct(nuevoProducto);
             res.json({
                 success: true,
                 message: "Producto agregado con éxito",
@@ -106,7 +119,17 @@ class ProductController {
 
     async updateProduct(req, res) {
         try {
-            const updatedProduct = await this.productService.updateProduct(req.params.pid, req.body);
+            const productToUpdate = {
+                ...req.body,
+                price: parseFloat(req.body.price.replace(",", "."))
+            };
+
+            // Solo actualizar el thumbnail si se subió un archivo
+            if (req.file) {
+                productToUpdate.thumbnail = `/img/${req.file.filename}`;
+            }
+
+            const updatedProduct = await this.productService.updateProduct(req.params.pid, productToUpdate);
             if (updatedProduct) {
                 res.json({
                     success: true,
@@ -136,6 +159,21 @@ class ProductController {
             }
         }
     }
+
+
+    /* async saveProduct(req,res) {
+        const { pid } = req.params;
+        if (!pid) {
+            // Esto es un nuevo producto, usar addProduct
+            await this.addProduct(req.body);
+        } else {
+            // Esto es un producto existente, usar updateProduct
+            await this.updateProduct(pid, req.body);
+        }
+        res.redirect("/somepath");
+    }
+ */
+
 
     async deleteProduct(req, res) {
         try {

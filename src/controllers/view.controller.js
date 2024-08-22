@@ -133,9 +133,9 @@ class ViewsController {
             if(pid) {
                 let result = await productService.getProductById(req.params.pid);
                 let product = JSON.parse(JSON.stringify(result));
-                res.render("newProduct", { session: req.session, owner, product});
+                res.render("editProduct", { session: req.session, owner, product});
             } else {
-                res.render("newProduct", { session: req.session, owner });
+                res.render("editProduct", { session: req.session, owner });
             }
             
 
@@ -290,46 +290,6 @@ class ViewsController {
             });
             req.logger.error("Fallo al generar productos fake");
 
-        }
-    }
-
-    async saveProduct (req,res) {
-        if(!req.session.login) return res.redirect("/login");
-    
-        try {
-            if (!req.body || !req.body.title || !req.body.price || !req.body.code || !req.body.stock) {
-                throw CustomError.createError({
-                    name: "Save product",
-                    cause: generateErrorInfo({}),
-                    mensaje: "Error al guardar el nuevo producto. Faltan Datos",
-                    codigo: EErrors.INVALID_TYPES_ERROR
-                })
-            }
-    
-            if (!req.params.pid){
-                const nuevoProducto = new ProductosModel();
-                nuevoProducto.title = req.body.title;
-                nuevoProducto.description = req.body.description;
-                nuevoProducto.price = parseFloat(req.body.price.replace(",","."));
-                nuevoProducto.thumbnail = req.body.thumbnail;
-                nuevoProducto.code = req.body.code;
-                nuevoProducto.category = req.body.category;
-                nuevoProducto.stock= req.body.stock;
-                nuevoProducto.status = req.body.status === 'on';
-                nuevoProducto.thumbnail = "/img/"+ req.file.filename;
-                nuevoProducto.owner = req.body.owner;
-        
-                await nuevoProducto.save();
-            } else {
-
-                let producto = productService.updateProduct(req.params.pid, req.body )
-                
-            }
-    
-            res.status(200).redirect("/");
-        } catch (error) {
-    
-            res.status(500).send({message: `Error en el servidor: ${error}`}); 
         }
     }
 
