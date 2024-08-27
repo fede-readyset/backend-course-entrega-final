@@ -1,8 +1,3 @@
-openapi: 3.0.0
-info:
-  title: API de Carritos de Compras
-  description: API para la gestión de carritos de compras
-  version: 1.0.0
 paths:
   /api/carts:
     get:
@@ -56,37 +51,11 @@ paths:
         '404':
           description: Carrito no encontrado
         '500':
-          description: Error del servidor al buscar carrito especificado
-    put:
-      tags:
-        - Carts
-      summary: Actualiza los productos de un carrito por ID
-      parameters:
-        - in: path
-          name: cid
-          schema:
-            type: string
-          required: true
-          description: ID del carrito
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Cart"
-      responses:
-        '200':
-          description: Carrito actualizado con éxito
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Cart"
-        '500':
-          description: Fallo al actualizar el carrito
+          description: Error del servidor al buscar carrito
     delete:
       tags:
         - Carts
-      summary: Vacía un carrito por ID
+      summary: Vacía un carrito
       parameters:
         - in: path
           name: cid
@@ -96,9 +65,25 @@ paths:
           description: ID del carrito
       responses:
         '200':
-          description: Carrito vaciado correctamente
+          description: Carrito vaciado con éxito
         '500':
-          description: Fallo al vaciar el carrito
+          description: Error del servidor al vaciar el carrito
+    put:
+      tags:
+        - Carts
+      summary: Cambia los productos en el carrito
+      parameters:
+        - in: path
+          name: cid
+          schema:
+            type: string
+          required: true
+          description: ID del carrito
+      responses:
+        '200':
+          description: Productos en el carrito actualizados con éxito
+        '500':
+          description: Error al actualizar productos en el carrito
 
   /api/carts/{cid}/product/{pid}:
     post:
@@ -120,9 +105,9 @@ paths:
           description: ID del producto
       responses:
         '200':
-          description: Producto añadido al carrito correctamente
+          description: Producto agregado al carrito con éxito
         '500':
-          description: Fallo al agregar el producto al carrito
+          description: Error al agregar producto al carrito
     delete:
       tags:
         - Carts
@@ -142,15 +127,15 @@ paths:
           description: ID del producto
       responses:
         '200':
-          description: Producto eliminado del carrito correctamente
+          description: Producto eliminado del carrito con éxito
         '500':
-          description: Fallo al eliminar el producto del carrito
+          description: Error al eliminar producto del carrito
 
   /api/carts/{cid}/purchase:
     get:
       tags:
         - Carts
-      summary: Confirma la compra de un carrito
+      summary: Confirma la compra del carrito
       parameters:
         - in: path
           name: cid
@@ -162,66 +147,24 @@ paths:
         '200':
           description: Compra confirmada con éxito
         '500':
-          description: Fallo al finalizar la compra
+          description: Error al confirmar la compra del carrito
 
 components:
   schemas:
     Cart:
       type: object
       properties:
-        _id:
+        id:
           type: string
-          example: "60d21b4667d0d8992e610c85"
+          description: ID del carrito
         products:
           type: array
           items:
             type: object
             properties:
-              product:
+              productId:
                 type: string
                 description: ID del producto
-                example: "60d21b4667d0d8992e610c86"
-              qty:
-                type: number
+              quantity:
+                type: integer
                 description: Cantidad del producto
-                example: 2
-        total:
-          type: number
-          example: 200.50
-      required:
-        - products
-        - total
-      example:
-        _id: "60d21b4667d0d8992e610c85"
-        products:
-          - product: "60d21b4667d0d8992e610c86"
-            qty: 2
-          - product: "60d21b4667d0d8992e610c87"
-            qty: 1
-        total: 300.75
-
-    Product:
-      type: object
-      properties:
-        _id:
-          type: string
-          example: "60d21b4667d0d8992e610c86"
-        name:
-          type: string
-          example: "Producto 1"
-        description:
-          type: string
-          example: "Descripción del producto 1"
-        price:
-          type: number
-          example: 100.25
-        category:
-          type: string
-          example: "Categoría 1"
-        stock:
-          type: integer
-          example: 50
-      required:
-        - name
-        - price
-        - category

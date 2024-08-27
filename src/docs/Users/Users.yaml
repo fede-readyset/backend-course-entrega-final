@@ -1,0 +1,261 @@
+paths:
+  /api/users:
+    get:
+      tags:
+        - Users
+      summary: Lista todos los usuarios
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        '500':
+          description: Fallo al obtener lista de usuarios
+
+  /api/users/profile:
+    get:
+      summary: Obtiene el perfil del usuario
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Perfil del usuario
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/User"
+        '401':
+          description: No autorizado
+
+  /api/users/failedregister:
+    get:
+      summary: Registro fallido
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Registro fallido
+
+  /api/users/github:
+    get:
+      summary: Inicia sesión con GitHub
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Inicio de sesión con GitHub exitoso
+        '500':
+          description: Error en el inicio de sesión con GitHub
+
+  /api/users/login:
+    post:
+      summary: Inicia sesión con credenciales
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login"
+      responses:
+        '200':
+          description: Inicio de sesión exitoso
+        '401':
+          description: Credenciales inválidas
+        '500':
+          description: Error en el inicio de sesión
+
+  /api/users/requestPasswordReset:
+    post:
+      summary: Solicita restablecimiento de contraseña
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RequestPasswordReset"
+      responses:
+        '200':
+          description: Solicitud de restablecimiento enviada
+        '404':
+          description: Usuario no encontrado
+        '500':
+          description: Error interno del servidor
+
+  /api/users/reset-password:
+    post:
+      summary: Restablece la contraseña del usuario
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResetPassword"
+      responses:
+        '200':
+          description: Contraseña restablecida
+        '404':
+          description: Usuario no encontrado
+        '500':
+          description: Error interno del servidor
+
+  /api/users/{uid}/documents:
+    post:
+      summary: Sube documentos para un usuario
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: uid
+          schema:
+            type: string
+          required: true
+          description: ID del usuario
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                document:
+                  type: string
+                  format: binary
+                  description: Documentos del usuario
+                products:
+                  type: string
+                  format: binary
+                  description: Productos del usuario
+                profile:
+                  type: string
+                  format: binary
+                  description: Foto de perfil del usuario
+      responses:
+        '200':
+          description: Documentos subidos con éxito
+        '500':
+          description: Error al subir documentos
+
+  /api/users/{uid}:
+    put:
+      summary: Edita la información de un usuario
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: uid
+          schema:
+            type: string
+          required: true
+          description: ID del usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        '200':
+          description: Usuario editado con éxito
+        '500':
+          description: Error al editar usuario
+
+    delete:
+      summary: Elimina un usuario
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: uid
+          schema:
+            type: string
+          required: true
+          description: ID del usuario
+      responses:
+        '200':
+          description: Usuario eliminado con éxito
+        '500':
+          description: Error al eliminar usuario
+
+  /api/users/premium/{uid}:
+    put:
+      summary: Cambia el rol de un usuario a premium
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: uid
+          schema:
+            type: string
+          required: true
+          description: ID del usuario
+      responses:
+        '200':
+          description: Rol de usuario cambiado a premium con éxito
+        '500':
+          description: Error al cambiar rol de usuario
+
+  /api/users/delete-inactive:
+    delete:
+      summary: Elimina usuarios inactivos
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Usuarios inactivos eliminados con éxito
+        '500':
+          description: Error al eliminar usuarios inactivos
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID del usuario
+        first_name:
+          type: string
+          description: Nombre del usuario
+        last_name:
+          type: string
+          description: Apellido del usuario
+        email:
+          type: string
+          description: Correo electrónico del usuario
+
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Correo electrónico del usuario
+        password:
+          type: string
+          description: Contraseña del usuario
+
+    RequestPasswordReset:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Correo electrónico del usuario
+
+    ResetPassword:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Token de restablecimiento de contraseña
+        newPassword:
+          type: string
+          description: Nueva contraseña del usuario

@@ -35,9 +35,20 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
-              $ref: "#/components/schemas/Product"
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Nombre del producto
+                price:
+                  type: number
+                  description: Precio del producto
+                image:
+                  type: string
+                  format: binary
+                  description: Imagen del producto
       responses:
         '200':
           description: Producto agregado con éxito
@@ -70,7 +81,7 @@ paths:
         '404':
           description: Producto no encontrado
         '500':
-          description: Fallo al obtener producto
+          description: Error del servidor al buscar producto
     put:
       tags:
         - Products
@@ -85,9 +96,20 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
-              $ref: "#/components/schemas/Product"
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Nombre del producto
+                price:
+                  type: number
+                  description: Precio del producto
+                image:
+                  type: string
+                  format: binary
+                  description: Imagen del producto
       responses:
         '200':
           description: Producto actualizado con éxito
@@ -95,8 +117,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Product"
-        '404':
-          description: No se encontró el producto a actualizar
         '500':
           description: Fallo al actualizar producto
     delete:
@@ -113,36 +133,23 @@ paths:
       responses:
         '200':
           description: Producto eliminado con éxito
-        '404':
-          description: No se encontró el producto a eliminar
         '500':
-          description: Fallo al eliminar producto
+          description: Error al eliminar producto
 
 components:
   schemas:
     Product:
       type: object
       properties:
-        _id:
+        id:
           type: string
+          description: ID del producto
         name:
           type: string
-        description:
-          type: string
+          description: Nombre del producto
         price:
           type: number
-        category:
+          description: Precio del producto
+        image:
           type: string
-        stock:
-          type: integer
-      required:
-        - name
-        - price
-        - category
-      example:
-        _id: ObjectID("123981293817abcd")
-        name: Harina 0000 1kg
-        description: Harina de trigo enriquecida 0000 por 1Kg
-        price: 100
-        category: Almacén
-        stock: 1000
+          description: URL de la imagen del producto
