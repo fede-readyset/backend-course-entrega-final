@@ -104,7 +104,7 @@ class ProductController {
                     message: "Error de validación: " + error.message
                 });
             } else {
-                req.logger.error("Fallo al agregar producto");
+                req.logger.error("Fallo al agregar producto"+error.message);
                 if (!res.headersSent) {
                     res.status(500).json({
                         success: false,

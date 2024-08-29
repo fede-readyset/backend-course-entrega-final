@@ -58,6 +58,8 @@ app.use((req, res, next) => {
     next();
 });
 
+app.locals.logoUrl=configObject.app_logo_url;
+
 
 // Configuro Middlewares
 import auth from "./middlewares/auth.js";

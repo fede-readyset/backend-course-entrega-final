@@ -11,7 +11,7 @@ const configObject = {
     node_env: process.env.NODE_ENV,
     port: process.env.PORT,
     base_url: process.env.BASE_URL,
-    gmail_app_passwd: process.env.GMAIL_APPLICATION_PASS
+    gmail_app_passwd: process.env.GMAIL_APPLICATION_PASS,
+    app_logo_url: process.env.APP_LOGO_URL
 }
-
 export default configObject;
